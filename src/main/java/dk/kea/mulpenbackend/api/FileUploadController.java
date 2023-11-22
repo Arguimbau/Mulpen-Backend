@@ -23,7 +23,7 @@ public class FileUploadController {
         }
 
         try {
-            String uploadDirectory = "/home/irozage/Git/Projects/Mulpen/Mulpen-Backend/src/main/resources/media/";
+            String uploadDirectory = System.getenv("MEDIA_FILE_PATH");
 
             Path uploadPath = Paths.get(uploadDirectory, file.getOriginalFilename());
 
