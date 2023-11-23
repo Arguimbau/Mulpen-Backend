@@ -1,5 +1,6 @@
 package dk.kea.mulpenbackend.api;
 
+import dk.kea.mulpenbackend.exception.UnexpectedFileTypeException;
 import dk.kea.mulpenbackend.model.MediaItem;
 import dk.kea.mulpenbackend.service.MediaService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +35,7 @@ public class MediaController {
         StringBuilder htmlBuilder = new StringBuilder();
         htmlBuilder.append("<!DOCTYPE html>");
         htmlBuilder.append("<html>");
-        htmlBuilder.append("<head>");
+        htmlBuilder.append("<head><link rel=\"stylesheet\" type=\"text/css\" href=\"https:/Arguimbau.github.io/Mulpen-Frontend/tree/main/css/media.css\"></head>");
         htmlBuilder.append("<meta charset=\"UTF-8\"/>");
         htmlBuilder.append("<title>Media Gallery</title>");
         htmlBuilder.append("</head>");
@@ -57,6 +58,12 @@ public class MediaController {
                 htmlBuilder.append("</video>");
             }
 
+            if (mediaItem.getType().contains("audio")) {
+                htmlBuilder.append("<audio controls>");
+                htmlBuilder.append("<source src=\"").append(mediaItem.getFilePath()).append("\" type=\"audio/mpeg\"");
+                htmlBuilder.append("</audio>");
+            }
+
             htmlBuilder.append("<p>").append(mediaItem.getDescription()).append("</p>");
             htmlBuilder.append("</div>");
         }
@@ -72,16 +79,36 @@ public class MediaController {
     @GetMapping("/{fileName:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String fileName) throws IOException {
         Resource resource = mediaService.loadMediaAsResource(fileName);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+
+        if (fileName.contains("jpg")) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpg")
+                    .body(resource);
+        } else if (fileName.contains("png")) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/png")
+                    .body(resource);
+        } else if (fileName.contains("mp4")){
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "video/mp4")
+                    .body(resource);
+        } else if (fileName.contains("mp3")) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
+                    .body(resource);
+        }
+        throw new UnexpectedFileTypeException("The given file type is not supported.");
     }
 
     //@CrossOrigin("*")
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "http://localhost:63342");
+        //HttpHeaders headers = new HttpHeaders();
+        //headers.add("Access-Control-Allow-Origin", "http://localhost:63342");
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a file to upload");
@@ -114,7 +141,7 @@ public class MediaController {
 
             mediaService.saveMedia(mediaItem);
 
-            return ResponseEntity.ok().headers(headers).body("File upload successful:" + file.getOriginalFilename());
+            return ResponseEntity.ok("File upload successful:" + file.getOriginalFilename());
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error occurred during file upload");
