@@ -20,16 +20,17 @@ public class initData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         Resource resource = resourceLoader.getResource("classpath:/media/");
         File mediaDirectory = resource.getFile();
         System.out.println("Classpath for /media/: " + mediaDirectory.getAbsolutePath());
 
-
         MediaItem mediaItem = new MediaItem();
         mediaItem.setDescription("red picture");
-        mediaItem.setFilePath("/media/download.png");
+        mediaItem.setFilePath("media/seele.jpg");
         mediaItem.setType("image");
 
         mediaService.saveMedia(mediaItem);
+
     }
 }

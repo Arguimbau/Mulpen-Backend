@@ -4,6 +4,8 @@ import dk.kea.mulpenbackend.model.MediaItem;
 import dk.kea.mulpenbackend.service.MediaService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+
+@RequestMapping("/media")
 @CrossOrigin
 @RestController
 public class MediaController {
@@ -23,7 +27,7 @@ public class MediaController {
     @Autowired
     private MediaService mediaService;
 
-    @GetMapping("/media")
+    @GetMapping
     public void showMedia(HttpServletResponse response) throws IOException{
         List<MediaItem> mediaList = mediaService.getAllMedia();
 
@@ -42,11 +46,11 @@ public class MediaController {
             htmlBuilder.append("<h3>").append(mediaItem.getDescription()).append("</h3>");
 
 
-            if ("image".equals(mediaItem.getType())) {
+            if (mediaItem.getType().contains("image")) {
                 htmlBuilder.append("<img src=\"").append(mediaItem.getFilePath()).append("\" alt=\"Image\"/>");
             }
 
-            if ("video".equals(mediaItem.getType())){
+            if (mediaItem.getType().contains("video")){
                 htmlBuilder.append("<video width=\"320\" height=\"240\" controls>");
                 htmlBuilder.append("<source src=\"").append(mediaItem.getFilePath()).append("\" type=\"video/mp4\"/>");
                 htmlBuilder.append("Your browser does not support the video tag.");
@@ -64,8 +68,21 @@ public class MediaController {
         response.getWriter().write(htmlBuilder.toString());
     }
 
+
+    @GetMapping("/{fileName:.+}")
+    public ResponseEntity<Resource> serveFile(@PathVariable String fileName) throws IOException {
+        Resource resource = mediaService.loadMediaAsResource(fileName);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    //@CrossOrigin("*")
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "http://localhost:63342");
+
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a file to upload");
         }
@@ -81,7 +98,7 @@ public class MediaController {
             Path uploadPath = Paths.get(uploadDirectory, file.getOriginalFilename());
 
             //Set Image path and description
-            mediaItem.setFilePath(uploadDirectory);
+            mediaItem.setFilePath("media/"+file.getOriginalFilename());
             mediaItem.setDescription(description);
 
             //File type handling
@@ -97,7 +114,7 @@ public class MediaController {
 
             mediaService.saveMedia(mediaItem);
 
-            return ResponseEntity.ok("File upload successful:" + file.getOriginalFilename());
+            return ResponseEntity.ok().headers(headers).body("File upload successful:" + file.getOriginalFilename());
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error occurred during file upload");
