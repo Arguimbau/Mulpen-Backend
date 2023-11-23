@@ -23,8 +23,8 @@ public class PostController {
     private MediaAttachmentRepository mediaAttachmentRepository;
 
     @PostMapping("/create-post")
-    public String createPost(@RequestParam("text") String text,
-                             @RequestParam("file")MultipartFile file) throws IOException {
+    public ResponseEntity<String> createPost(@RequestParam("text") String text,
+                                             @RequestParam("file")MultipartFile file) throws IOException {
 
         MediaPost mediaPost = new MediaPost();
         mediaPost.setText(text);
@@ -37,7 +37,8 @@ public class PostController {
             mediaAttachmentRepository.save(attachment);
         }
 
-        return "redirect:/posts";
+        return ResponseEntity.ok("{\"redirect\": \"/posts.html\"}");
+        //return "whatever";
     }
 
     @GetMapping("/posts")
