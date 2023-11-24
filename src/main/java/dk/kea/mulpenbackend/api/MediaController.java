@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-
 
 @RequestMapping("/media")
 @CrossOrigin
@@ -107,8 +105,6 @@ public class MediaController {
     //@CrossOrigin("*")
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.add("Access-Control-Allow-Origin", "http://localhost:63342");
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a file to upload");
@@ -117,8 +113,6 @@ public class MediaController {
         try {
 
             MediaItem mediaItem = new MediaItem();
-
-
 
             String uploadDirectory = System.getenv("MEDIA_FILE_PATH");
 
@@ -129,22 +123,19 @@ public class MediaController {
             mediaItem.setDescription(description);
 
             //File type handling
-
             String fileType = file.getContentType();
             System.out.println(fileType);
 
             mediaItem.setType(fileType);
 
-
             Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-
 
             mediaService.saveMedia(mediaItem);
 
-            return ResponseEntity.ok("File upload successful:" + file.getOriginalFilename());
+            return ResponseEntity.ok("File upload successful: " + file.getOriginalFilename());
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error occurred during file upload");
+            return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
         }
     }
 }
