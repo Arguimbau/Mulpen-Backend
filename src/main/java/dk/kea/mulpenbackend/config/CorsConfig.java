@@ -22,3 +22,4 @@ public class CorsConfig {
         return source;
     }
 }
+// schema://host:port

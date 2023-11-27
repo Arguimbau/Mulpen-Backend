@@ -1,6 +1,6 @@
 package dk.kea.mulpenbackend.service;
 
-import dk.kea.mulpenbackend.model.MediaItem;
+import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -14,11 +14,11 @@ import java.util.List;
 public class MediaService {
     @Autowired
     MediaRepository mediaRepository;
-    public List<MediaItem> getAllMedia() {
+    public List<MediaModel> getAllMedia() {
         return mediaRepository.findAll();
     }
 
-    public void saveMedia(MediaItem mediaItem) {
+    public void saveMedia(MediaModel mediaItem) {
         mediaRepository.save(mediaItem);
     }
 

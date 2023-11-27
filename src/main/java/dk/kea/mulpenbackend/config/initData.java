@@ -1,14 +1,10 @@
 package dk.kea.mulpenbackend.config;
 
-import org.springframework.core.io.Resource;
-import dk.kea.mulpenbackend.model.MediaItem;
 import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
 
 @Component
 public class initData implements CommandLineRunner {
