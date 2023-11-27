@@ -33,7 +33,7 @@ public class MediaController {
         StringBuilder htmlBuilder = new StringBuilder();
         htmlBuilder.append("<!DOCTYPE html>");
         htmlBuilder.append("<html>");
-        htmlBuilder.append("<head><link rel=\"stylesheet\" type=\"text/css\" href=\"https:/Arguimbau.github.io/Mulpen-Frontend/tree/main/css/media.css\"></head>");
+        htmlBuilder.append("<head><link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/DizzyMoon/Delivery-Frontend-Excercise/main/resources/static/css/media.css\"></head>");
         htmlBuilder.append("<meta charset=\"UTF-8\"/>");
         htmlBuilder.append("<title>Media Gallery</title>");
         htmlBuilder.append("</head>");
@@ -45,7 +45,7 @@ public class MediaController {
             htmlBuilder.append("<h3>").append(mediaItem.getDescription()).append("</h3>");
 
 
-            if (mediaItem.getType().contains("image")) {
+            if (mediaItem.getType().contains("image") || mediaItem.getType().contains("gif") || mediaItem.getType().contains("jpg") ||mediaItem.getType().contains("png") || mediaItem.getType().contains("jpeg")) {
                 htmlBuilder.append("<img src=\"").append(mediaItem.getFilePath()).append("\" alt=\"Image\"/>");
             }
 
@@ -78,22 +78,27 @@ public class MediaController {
     public ResponseEntity<Resource> serveFile(@PathVariable String fileName) throws IOException {
         Resource resource = mediaService.loadMediaAsResource(fileName);
 
-        if (fileName.contains("jpg")) {
+        if (fileName.contains("jpg") || fileName.contains("JPG")) {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, "image/jpg")
                     .body(resource);
-        } else if (fileName.contains("png")) {
+        } else if (fileName.contains("png") || fileName.contains("PNG")) {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, "image/png")
                     .body(resource);
-        } else if (fileName.contains("mp4")){
+        } else if (fileName.contains("gif") ||fileName.contains("GIF")){
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/gif")
+                    .body(resource);
+        } else if (fileName.contains("mp4") || fileName.contains("MP4")){
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, "video/mp4")
                     .body(resource);
-        } else if (fileName.contains("mp3")) {
+        } else if (fileName.contains("mp3") || fileName.contains("MP3")) {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, "audio/mpeg")

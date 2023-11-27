@@ -33,6 +33,7 @@ public class initData implements CommandLineRunner {
         mediaService.saveMedia(mediaItem);
 
  */
+        mediaService.addExistingMedia();
 
     }
 }

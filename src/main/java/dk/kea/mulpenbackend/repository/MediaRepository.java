@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MediaRepository extends JpaRepository<MediaItem, Long> {
+    public boolean existsByFilePath(String filePath);
 }
