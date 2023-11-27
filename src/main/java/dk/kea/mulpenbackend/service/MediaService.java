@@ -1,6 +1,6 @@
 package dk.kea.mulpenbackend.service;
 
-import dk.kea.mulpenbackend.model.MediaItem;
+import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.repository.MediaRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +8,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.apache.tika.Tika;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -29,11 +27,11 @@ public class MediaService {
         this.mediaRepository = mediaRepository;
     }
 
-    public List<MediaItem> getAllMedia() {
+    public List<MediaModel> getAllMedia() {
         return mediaRepository.findAll();
     }
 
-    public void saveMedia(MediaItem mediaItem) {
+    public void saveMedia(MediaModel mediaItem) {
         mediaRepository.save(mediaItem);
     }
 
@@ -55,21 +53,19 @@ public class MediaService {
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
 
-            Tika tika = new Tika();
-
             for (Path mediaFilePath : mediaFiles) {
                 String fileName = mediaFilePath.getFileName().toString();
 
                 if (!mediaRepository.existsByFilePath("media/" + fileName)) {
-                    MediaItem mediaItem = new MediaItem();
-                    mediaItem.setFilePath("media/" + fileName);
-                    mediaItem.setDescription("Description for " + fileName);
+                    MediaModel media = new MediaModel();
+                    media.setFilePath(fileName);
+                    media.setDescription("Description for " + fileName);
 
                     String fileExtension = FilenameUtils.getExtension(fileName).toLowerCase();
 
-                    mediaItem.setType(fileExtension);
+                    media.setType(fileExtension);
 
-                    saveMedia(mediaItem);
+                    saveMedia(media);
                 }
             }
             return ResponseEntity.ok("Existing media files added to database.");
