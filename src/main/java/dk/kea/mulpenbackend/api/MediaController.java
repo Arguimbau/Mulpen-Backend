@@ -5,8 +5,10 @@ import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
@@ -21,17 +23,26 @@ import java.util.List;
 
 @RequestMapping("/media")
 @CrossOrigin
-@RestController
+@Controller
 public class MediaController {
   private final ConfigProvider configProvider;
 
   @Autowired
   private MediaService mediaService;
 
+  @Autowired
+  ResourceLoader resourceLoader;
+
 
   @Autowired
   public MediaController(ConfigProvider configProvider) {
     this.configProvider = configProvider;
+  }
+
+  @GetMapping()
+  public String viewVideo() throws IOException {
+    Resource resource = resourceLoader.getResource("file:/home/irozage/Git/Projects/Mulpen/Mulpen-Frontend/viewVideo.html");
+    return "forward:" + resource.getURL().toString();
   }
 
   @GetMapping("/upload/{filename:.+}")
