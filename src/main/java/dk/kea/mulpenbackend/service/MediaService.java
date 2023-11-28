@@ -54,7 +54,7 @@ public class MediaService {
                     .collect(Collectors.toList());
 
             for (Path mediaFilePath : mediaFiles) {
-                
+
                 String fileName = mediaFilePath.getFileName().toString();
 
                 if (!mediaRepository.existsByFilePath("media/" + fileName)) {
