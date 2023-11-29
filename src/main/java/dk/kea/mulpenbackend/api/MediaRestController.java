@@ -5,17 +5,13 @@ import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +22,7 @@ import java.util.List;
 @RequestMapping("/media")
 @CrossOrigin
 @RestController
-public class MediaController {
+public class MediaRestController {
     private final ConfigProvider configProvider;
 
     @Autowired
@@ -34,7 +30,7 @@ public class MediaController {
 
 
     @Autowired
-    public MediaController(ConfigProvider configProvider) {
+    public MediaRestController(ConfigProvider configProvider) {
         this.configProvider = configProvider;
     }
 

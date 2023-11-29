@@ -14,8 +14,14 @@ import java.io.IOException;
 public class viewController {
 
     @GetMapping("/videos")
-    public void forwardToViewVideo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    public void forwardToViewVideoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/viewVideo.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @GetMapping("/upload")
+    public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/uploadMedia.html");
         requestDispatcher.forward(request, response);
     }
 }
