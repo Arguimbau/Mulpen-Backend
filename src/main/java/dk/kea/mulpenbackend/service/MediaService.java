@@ -1,5 +1,6 @@
 package dk.kea.mulpenbackend.service;
 
+import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.repository.MediaRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -9,22 +10,25 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Service
 public class MediaService {
 
     MediaRepository mediaRepository;
+    private ConfigProvider configProvider;
 
     @Autowired
-    public MediaService(MediaRepository mediaRepository) {
+    public MediaService(MediaRepository mediaRepository, ConfigProvider configProvider) {
         this.mediaRepository = mediaRepository;
+        this.configProvider = configProvider;
     }
 
     public List<MediaModel> getAllMedia() {
@@ -75,4 +79,32 @@ public class MediaService {
             return ResponseEntity.status(500).body("An error occurred while adding existing media.");
         }
     }
+
+    public void deleteMedia(Long id) {
+        Optional<MediaModel> optionalMedia = mediaRepository.findById(id);
+
+        if (optionalMedia.isPresent()) {
+            MediaModel media = optionalMedia.get();
+
+            // Delete file from the "media" directory
+            String filePath = media.getFilePath();
+            File file = new File(configProvider.uploadDirectory, filePath);
+
+            if (file.exists()) {
+                file.delete();
+                if (file == null) {
+                    mediaRepository.deleteById(id);
+                    System.out.println("File deleted successfully");
+                } else {
+                    System.err.println("Failed to delete the file");
+                }
+            } else {
+                System.err.println("File not found");
+            }
+
+            // Delete the database record
+            mediaRepository.deleteById(id);
+        }
+    }
 }
+
