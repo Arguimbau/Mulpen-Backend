@@ -54,6 +54,6 @@ public class ViewController {
     public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
-        requestDispatcher.forward(request, response);root
+        requestDispatcher.forward(request, response);
     }
 }
