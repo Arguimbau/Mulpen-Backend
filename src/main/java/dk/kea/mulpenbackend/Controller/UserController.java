@@ -1,5 +1,6 @@
 package dk.kea.mulpenbackend.Controller;
 
+
 import dk.kea.mulpenbackend.DTO.JwtRequestModel;
 import dk.kea.mulpenbackend.DTO.JwtResponseModel;
 import dk.kea.mulpenbackend.JwtTokenManager;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+
+;
 
 
 @RestController

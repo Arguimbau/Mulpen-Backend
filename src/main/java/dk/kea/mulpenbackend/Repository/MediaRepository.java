@@ -1,6 +1,6 @@
-package dk.kea.mulpenbackend.repository;
+package dk.kea.mulpenbackend.Repository;
 
-import dk.kea.mulpenbackend.model.MediaModel;
+import dk.kea.mulpenbackend.Entity.MediaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

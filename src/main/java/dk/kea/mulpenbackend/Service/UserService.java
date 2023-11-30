@@ -1,9 +1,9 @@
 package dk.kea.mulpenbackend.Service;
 
 
-import dk.kea.mulpenbackend.config.SecurityConfiguration;
 import dk.kea.mulpenbackend.Entity.User;
 import dk.kea.mulpenbackend.Repository.UserRepository;
+import dk.kea.mulpenbackend.config.SecurityConfiguration;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
     private UserRepository userRepository;
     @Override

@@ -1,4 +1,4 @@
-package dk.kea.mulpenbackend.model;
+package dk.kea.mulpenbackend.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
