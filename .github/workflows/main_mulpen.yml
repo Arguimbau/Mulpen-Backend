@@ -14,9 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      JDBC_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
-      JDBC_DATASOURCE_USERNAME: ${{secrets.SPRING_DATASOURCE_USERNAME}}
-      JDBC_DATASOURCE_PASSWORD: ${{secrets.SPRING_DATASOURCE_PASSWORD}}
+      SECRET: bigballerMulpenakjwhdaikwhdawawdjaowjdwOAJOAJDOAJDoawjdoajdoajwdoajdoajwdoajwdoajdhdaiwhdaihdiauwdhaiuwhdiawhdiawhdaiwuhd
 
     steps:
       - uses: actions/checkout@v3
