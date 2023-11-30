@@ -1,6 +1,7 @@
 package dk.kea.mulpenbackend.api;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,5 +30,30 @@ public class ViewController {
         ServletContext context = request.getServletContext();
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadMedia.html");
         requestDispatcher.forward(request, response);
+    }
+
+    //about
+    //contact
+    //home
+
+    @GetMapping("/")
+    public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/index.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @GetMapping("/about")
+    public void forwardToAboutPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/about.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @GetMapping("/contact")
+    public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
+        requestDispatcher.forward(request, response);root
     }
 }
