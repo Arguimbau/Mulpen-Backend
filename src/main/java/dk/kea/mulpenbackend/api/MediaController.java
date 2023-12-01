@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/media")
 @CrossOrigin
 @RestController
-public class MediaRestController {
+public class MediaController {
     private final ConfigProvider configProvider;
 
     @Autowired
@@ -30,7 +30,7 @@ public class MediaRestController {
 
 
     @Autowired
-    public MediaRestController(ConfigProvider configProvider) {
+    public MediaController(ConfigProvider configProvider) {
         this.configProvider = configProvider;
     }
 
@@ -44,7 +44,6 @@ public class MediaRestController {
     }
 
      */
-
 
     @GetMapping("/upload/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {

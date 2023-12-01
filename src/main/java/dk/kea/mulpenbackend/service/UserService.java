@@ -1,9 +1,9 @@
-package dk.kea.mulpenbackend.Service;
+package dk.kea.mulpenbackend.service;
 
 
 import dk.kea.mulpenbackend.config.SecurityConfiguration;
 import dk.kea.mulpenbackend.Entity.User;
-import dk.kea.mulpenbackend.Repository.UserRepository;
+import dk.kea.mulpenbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

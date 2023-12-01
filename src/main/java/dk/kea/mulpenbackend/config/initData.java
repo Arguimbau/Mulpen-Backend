@@ -1,35 +1,28 @@
 package dk.kea.mulpenbackend.config;
 
-import dk.kea.mulpenbackend.service.MediaService;
+import dk.kea.mulpenbackend.Entity.User;
+import dk.kea.mulpenbackend.repository.UserRepository;
+import dk.kea.mulpenbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 @Component
-public class initData implements CommandLineRunner {
-    @Autowired
-    MediaService mediaService;
+public class InitData implements CommandLineRunner
+{
 
     @Autowired
-    ResourceLoader resourceLoader;
+    UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Override
-    public void run(String... args) throws Exception {
-/*
-        Resource resource = resourceLoader.getResource("classpath:/media/");
-        File mediaDirectory = resource.getFile();
-        System.out.println("Classpath for /media/: " + mediaDirectory.getAbsolutePath());
-
-        MediaItem mediaItem = new MediaItem();
-        mediaItem.setDescription("red picture");
-        mediaItem.setFilePath("media/seele.jpg");
-        mediaItem.setType("image");
-
-        mediaService.saveMedia(mediaItem);
-
- */
-        mediaService.addExistingMedia();
-
+    public void run(String... args) throws Exception
+    {
+        User user = new User();
+        user.setPassword("1234");
+        user.setUsername("admin");
+        userService.save(user);
     }
 }

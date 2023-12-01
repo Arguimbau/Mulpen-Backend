@@ -1,3 +1,4 @@
+
 package dk.kea.mulpenbackend.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,3 +19,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + frontendPath + "/");
     }
 }
+

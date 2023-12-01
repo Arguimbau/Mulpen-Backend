@@ -1,4 +1,4 @@
-package dk.kea.mulpenbackend.Service;
+package dk.kea.mulpenbackend.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;

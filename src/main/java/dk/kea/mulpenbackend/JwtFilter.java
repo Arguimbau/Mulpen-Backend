@@ -1,6 +1,6 @@
 package dk.kea.mulpenbackend;
 
-import dk.kea.mulpenbackend.Service.JwtUserDetailsService;
+import dk.kea.mulpenbackend.service.JwtUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,21 +25,21 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String tokenHeader = request.getHeader("Authorization");
-        System.out.println("JwtFilter doFilterInternal call 3 request header" + tokenHeader ); // + JwtController.printHeader(request)
-        String username = null;
-        String token = null;
+        System.out.println("JwtFilter doFilterInternal call 3 request header: " + tokenHeader);
+
         if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
-            token = tokenHeader.substring(7);
+            String token = tokenHeader.substring(7);
             try {
-                username = jwtTokenManager.getUsernameFromToken(token);
+                String username = jwtTokenManager.getUsernameFromToken(token);
+                validateToken(request, username, token);
             } catch (Exception e) {
-                System.out.println("Unable to get JWT Token");
+                System.out.println("Unable to get JWT Token: " + e.getMessage());
             }
         } else {
-            System.out.println("String does not start with Bearer or tokenheader == NULL");
+            // For anonymous users, proceed without checking the token
+            System.out.println("No or invalid Authorization header for this request. Proceeding for anonymous user.");
+            filterChain.doFilter(request, response);
         }
-        validateToken(request, username, token);
-        filterChain.doFilter(request, response); //possible: response.setHeader( "key",value); its up to you.
     }
 
     private void validateToken(HttpServletRequest request, String username, String token) {
