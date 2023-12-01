@@ -1,4 +1,4 @@
-package dk.kea.mulpenbackend.DTO;
+package dk.kea.mulpenbackend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

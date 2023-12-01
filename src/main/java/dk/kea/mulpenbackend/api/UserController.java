@@ -1,10 +1,10 @@
-package dk.kea.mulpenbackend.Controller;
+package dk.kea.mulpenbackend.api;
 
-import dk.kea.mulpenbackend.DTO.JwtRequestModel;
-import dk.kea.mulpenbackend.DTO.JwtResponseModel;
+import dk.kea.mulpenbackend.dto.JwtRequestModel;
+import dk.kea.mulpenbackend.dto.JwtResponseModel;
 import dk.kea.mulpenbackend.JwtTokenManager;
-import dk.kea.mulpenbackend.Service.IUserService;
-import dk.kea.mulpenbackend.Service.JwtUserDetailsService;
+import dk.kea.mulpenbackend.service.IUserService;
+import dk.kea.mulpenbackend.service.JwtUserDetailsService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
