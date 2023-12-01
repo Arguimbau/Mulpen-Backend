@@ -1,9 +1,9 @@
 package dk.kea.mulpenbackend.service;
 
-import dk.kea.mulpenbackend.Entity.User;
+import dk.kea.mulpenbackend.model.UserModel;
 
 import java.util.List;
 
-public interface IUserService extends ICrudService<User,Long>{
-    List<User> findByName(String name);
+public interface IUserService extends ICrudService<UserModel,Long>{
+    List<UserModel> findByName(String name);
 }

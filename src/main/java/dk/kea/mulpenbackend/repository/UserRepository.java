@@ -1,11 +1,11 @@
 package dk.kea.mulpenbackend.repository;
 
-import dk.kea.mulpenbackend.Entity.User;
+import dk.kea.mulpenbackend.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User,Long> {
-    List<User> findByUsername(String name);
+public interface UserRepository extends JpaRepository<UserModel,Long> {
+    List<UserModel> findByUsername(String name);
     //List<User> findUserByPasswordContains(String passwordPart);
 }

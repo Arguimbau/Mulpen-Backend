@@ -1,5 +1,6 @@
 package dk.kea.mulpenbackend.service;
 
+import dk.kea.mulpenbackend.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         // Herefter opretter man et nyt userdetails.User objekt med usr/pw fra databasen.
         // Spring Security vil herefter bruge bcrypt.compare() til at sammenligne clear-text pw fra
         // login-formular med datbasens bcrypt af pw. Hvis svaret er true, er brugeren godkendt.
-        List<dk.kea.mulpenbackend.Entity.User> users = userService.findByName(username);
+        List<UserModel> users = userService.findByName(username);
         System.out.println("users from database: length: " + users.size());
         if(users.size()==1) {
             System.out.println("found the user in Database: " + users.get(0).getUsername());

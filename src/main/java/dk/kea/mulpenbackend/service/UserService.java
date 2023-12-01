@@ -2,7 +2,7 @@ package dk.kea.mulpenbackend.service;
 
 
 import dk.kea.mulpenbackend.config.SecurityConfiguration;
-import dk.kea.mulpenbackend.Entity.User;
+import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,14 +19,14 @@ public class UserService implements IUserService{
 
     private UserRepository userRepository;
     @Override
-    public Set<User> findAll() {
-        Set<User> set = new HashSet<>();
+    public Set<UserModel> findAll() {
+        Set<UserModel> set = new HashSet<>();
         userRepository.findAll().forEach(set::add);
         return set;
     }
 
     @Override
-    public User save(User user) {
+    public UserModel save(UserModel user) {
 //        if(user.getPassword() == null) {
         PasswordEncoder pw = SecurityConfiguration.passwordEncoder();
         user.setPassword(pw.encode(user.getPassword()));
@@ -35,7 +35,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public void delete(User object) {
+    public void delete(UserModel object) {
         userRepository.delete(object);
     }
 
@@ -45,12 +45,12 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public Optional<User> findById(Long aLong) {
+    public Optional<UserModel> findById(Long aLong) {
         return userRepository.findById(aLong);
     }
 
     @Override
-    public List<User> findByName(String name) {
+    public List<UserModel> findByName(String name) {
         System.out.println("Userservice called findByName with argument: " + name);
         return userRepository.findByUsername(name);
     }
