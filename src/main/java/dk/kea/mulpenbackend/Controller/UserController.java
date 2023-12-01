@@ -8,6 +8,7 @@ import dk.kea.mulpenbackend.Service.JwtUserDetailsService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,7 +39,6 @@ public class UserController
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponseModel> createToken(@RequestBody JwtRequestModel request) throws Exception {
-        // HttpServletRequest servletRequest is available from Spring, if needed.
         System.out.println(" JwtController createToken Call: 4" + request.getUsername());
         try {
             authenticationManager.authenticate(
@@ -48,12 +48,13 @@ public class UserController
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            return ResponseEntity.ok(new JwtResponseModel("bad credentials"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JwtResponseModel("Bad credentials"));
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         final String jwtToken = jwtTokenManager.generateJwtToken(userDetails);
         return ResponseEntity.ok(new JwtResponseModel(jwtToken));
     }
+
     @PostMapping("/getSecret")
     public ResponseEntity<Map> getSecret() {
         System.out.println("getSecret is called");
