@@ -39,27 +39,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         }
         return passwordEncoder;
     }
-    /*
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            http
-                    .csrf().disable()
-                    .authorizeHttpRequests((requests) -> {
-                        try {
-                            requests
-                                    .requestMatchers("/", "/home").permitAll()
-                                    .anyRequest().authenticated()
-                                    .and()
-                                    .formLogin().disable()
-                                    .httpBasic().disable();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
 
-            return http.build();
-        }
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -83,7 +63,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
+/*
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user =
@@ -95,6 +75,10 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
         return new InMemoryUserDetailsManager(user);
     }
+
+ */
+
+
 
 
     @Override
