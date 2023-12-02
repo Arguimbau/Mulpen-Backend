@@ -1,33 +1,45 @@
 package dk.kea.mulpenbackend.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.dto.JwtRequestModel;
 import dk.kea.mulpenbackend.dto.JwtResponseModel;
 import dk.kea.mulpenbackend.JwtTokenManager;
+import dk.kea.mulpenbackend.model.MediaModel;
+import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.service.IUserService;
 import dk.kea.mulpenbackend.service.JwtUserDetailsService;
+import dk.kea.mulpenbackend.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 @RestController
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserController
-{
+public class UserController {
+    private final ConfigProvider configProvider;
+
     @Autowired
     private JwtUserDetailsService userDetailsService;
     @Autowired
@@ -35,7 +47,14 @@ public class UserController
     @Autowired
     private JwtTokenManager jwtTokenManager;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
+
+    @Autowired
+    public UserController(ConfigProvider configProvider) {
+        this.configProvider = configProvider;
+    }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponseModel> createToken(@RequestBody JwtRequestModel request) throws Exception {
@@ -58,8 +77,50 @@ public class UserController
     @PostMapping("/getSecret")
     public ResponseEntity<Map> getSecret() {
         System.out.println("getSecret is called");
-        Map<String,String > map = new HashMap<>();
-        map.put("message","this is secret from server");
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "this is secret from server");
         return ResponseEntity.ok(map);
     }
+
+    @GetMapping("/allUsers")
+    public List<UserModel> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    private String[] badExtensions = {"java", "htm", "html", "py"};
+    private String[] allowedExtensions = {
+            "jpg", "png", "jpeg", "gif", "webp"
+    };
+    @PostMapping(value = "/addUser", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> addUser(@RequestPart("file") MultipartFile file, @RequestPart("user") String userJson) throws JsonProcessingException {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Please select a file to upload");
+        }
+
+        try {
+            // Deserialize userJson to UserModel
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserModel userModel = objectMapper.readValue(userJson, UserModel.class);
+
+            String safeFileName = FilenameUtils.getName(file.getOriginalFilename());
+            String extension = FilenameUtils.getExtension(safeFileName);
+
+            if (extension == null || Arrays.asList(badExtensions).contains(extension) || !Arrays.asList(allowedExtensions).contains(extension)) {
+                return ResponseEntity.badRequest().body("File type not allowed");
+            }
+
+            Path uploadPath = Paths.get(configProvider.profileDirectory, safeFileName);
+            userModel.setFilePath(safeFileName);
+
+            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+
+            userService.save(userModel);
+
+            return ResponseEntity.ok().body("{\"message\": \"File upload successful: " + safeFileName + "\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
+        }
+    }
+
 }

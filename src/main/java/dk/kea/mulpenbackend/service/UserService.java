@@ -2,16 +2,25 @@ package dk.kea.mulpenbackend.service;
 
 
 import dk.kea.mulpenbackend.config.SecurityConfiguration;
+import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -25,13 +34,23 @@ public class UserService implements IUserService{
         return set;
     }
 
-    @Override
     public UserModel save(UserModel user) {
-//        if(user.getPassword() == null) {
+        System.out.println("User before encoding password: " + user.toString());
+
+        if (user.getPassword() == null) {
+            // Handle the case where the password is null, you might throw an exception or handle it as appropriate for your application.
+        }
+
         PasswordEncoder pw = SecurityConfiguration.passwordEncoder();
         user.setPassword(pw.encode(user.getPassword()));
-//        }
+        user.setName(user.getUsername());
+        user.setEmail(user.getEmail());
+        user.setTitle(user.getTitle());
         return userRepository.save(user);
+    }
+
+    public List<UserModel> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -53,5 +72,35 @@ public class UserService implements IUserService{
     public List<UserModel> findByName(String name) {
         System.out.println("Userservice called findByName with argument: " + name);
         return userRepository.findByUsername(name);
+    }
+    public ResponseEntity<String> addExistingMedia() {
+        try {
+            String mediaDirectoryPath = System.getenv("USER_FILE_PATH");
+
+            List<Path> mediaFiles = Files.walk(Paths.get(mediaDirectoryPath), 1, FileVisitOption.FOLLOW_LINKS)
+                    .filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+
+            for (Path mediaFilePath : mediaFiles) {
+
+                String fileName = mediaFilePath.getFileName().toString();
+
+                if (!userRepository.existsByFilePath("user/" + fileName)) {
+                    UserModel user = new UserModel();
+                    user.setFilePath(fileName);
+                    user.setTitle("Description for " + fileName);
+
+                    String fileExtension = FilenameUtils.getExtension(fileName).toLowerCase();
+
+                    user.setType(fileExtension);
+
+                    save(user);
+                }
+            }
+            return ResponseEntity.ok("Existing user files added to database.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An error occurred while adding existing user.");
+        }
     }
 }

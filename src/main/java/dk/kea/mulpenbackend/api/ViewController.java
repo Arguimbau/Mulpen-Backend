@@ -44,6 +44,12 @@ public class ViewController {
     //about
     //contact
     //home
+    @GetMapping("/opretBruger")
+    public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/createUser.html");
+        requestDispatcher.forward(request, response);
+    }
 
     @GetMapping("/login")
     public void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
