@@ -21,7 +21,7 @@ jobs:
       JDBC_DATABASE_PASSWORD: ${{ Production.FRONTEND_DIRECTORY_PATH }}
       MEDIA_FILE_PATH: ${{ Production.MEDIA_FILE_PATH }}
       PROFILE_FILE_PATH: ${{ Production.PROFILE_FILE_PATH }}
-    
+
     steps:
       - uses: actions/checkout@v3
 
