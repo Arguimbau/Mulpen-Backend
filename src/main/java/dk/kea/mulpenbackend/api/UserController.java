@@ -87,7 +87,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    private String[] badExtensions = {"java", "htm", "html", "py"};
     private String[] allowedExtensions = {
             "jpg", "png", "jpeg", "gif", "webp"
     };
@@ -105,9 +104,10 @@ public class UserController {
             String safeFileName = FilenameUtils.getName(file.getOriginalFilename());
             String extension = FilenameUtils.getExtension(safeFileName);
 
-            if (extension == null || Arrays.asList(badExtensions).contains(extension) || !Arrays.asList(allowedExtensions).contains(extension)) {
+            if (extension == null || !Arrays.asList(allowedExtensions).contains(extension)) {
                 return ResponseEntity.badRequest().body("File type not allowed");
             }
+
 
             Path uploadPath = Paths.get(configProvider.profileDirectory, safeFileName);
             userModel.setFilePath(safeFileName);
