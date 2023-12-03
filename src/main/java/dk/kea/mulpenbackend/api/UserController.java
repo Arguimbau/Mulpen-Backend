@@ -2,17 +2,14 @@ package dk.kea.mulpenbackend.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.kea.mulpenbackend.JwtTokenManager;
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.dto.JwtRequestModel;
 import dk.kea.mulpenbackend.dto.JwtResponseModel;
-import dk.kea.mulpenbackend.JwtTokenManager;
-import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.model.UserModel;
-import dk.kea.mulpenbackend.service.IUserService;
 import dk.kea.mulpenbackend.service.JwtUserDetailsService;
 import dk.kea.mulpenbackend.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +27,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 
 @RestController
@@ -73,6 +68,29 @@ public class UserController {
         final String jwtToken = jwtTokenManager.generateJwtToken(userDetails);
         return ResponseEntity.ok(new JwtResponseModel(jwtToken));
     }
+
+    private static Set<String> invalidatedTokens = new HashSet<>();
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String authToken = request.getHeader("Authorization");
+
+        if (authToken != null && authToken.startsWith("Bearer ")) {
+            authToken = authToken.substring(7);
+
+            // Perform token invalidation logic
+            if (!invalidatedTokens.contains(authToken)) {
+                invalidatedTokens.add(authToken);
+                System.out.println("Invalidating token: " + authToken);
+                return ResponseEntity.ok("Logout successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token has already been invalidated");
+            }
+        }
+
+        return ResponseEntity.badRequest().body("Invalid token format");
+    }
+
 
     @PostMapping("/getSecret")
     public ResponseEntity<Map> getSecret() {
