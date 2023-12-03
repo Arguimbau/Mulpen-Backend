@@ -5,6 +5,7 @@ import dk.kea.mulpenbackend.config.SecurityConfiguration;
 import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseEntity;
@@ -53,10 +54,19 @@ public class UserService implements IUserService{
         return userRepository.findAll();
     }
 
+    @Transactional
     @Override
-    public void delete(UserModel object) {
-        userRepository.delete(object);
+    public void delete(UserModel user) {
+        try {
+            userRepository.delete(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete user");
+
+        }
     }
+
+
 
     @Override
     public void deleteById(Long aLong) {

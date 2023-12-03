@@ -24,5 +24,10 @@ public class InitData implements CommandLineRunner
         user.setPassword("1234");
         user.setUsername("admin");
         userService.save(user);
+
+        UserModel user2 = new UserModel();
+        user2.setPassword("1234");
+        user2.setUsername("user");
+        userService.save(user2);
     }
 }

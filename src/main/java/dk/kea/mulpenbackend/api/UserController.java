@@ -140,5 +140,22 @@ public class UserController {
             return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
         }
     }
+    @PostMapping("/deleteUser")
+    public ResponseEntity<String> deleteUser(@RequestBody Map<String, String> requestData) {
+        String userId = requestData.get("userId");
+
+        // Assuming userService.delete takes a UserModel as an argument
+        Optional<UserModel> user = userService.findById(Long.parseLong(userId));
+
+        if (user.isPresent()) {
+            userService.delete(user.get());
+            System.out.println("Deleted user: " + user.get());
+            return ResponseEntity.ok("User deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+    }
+
+
 
 }
