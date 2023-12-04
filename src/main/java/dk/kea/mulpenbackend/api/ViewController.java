@@ -25,7 +25,7 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/upload")
     public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
@@ -33,7 +33,7 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin")
     public void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();

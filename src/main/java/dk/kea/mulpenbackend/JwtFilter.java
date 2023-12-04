@@ -31,13 +31,16 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = tokenHeader.substring(7);
             try {
                 String username = jwtTokenManager.getUsernameFromToken(token);
+                System.out.println("Extracted username from token: " + username);
                 validateToken(request, username, token);
+                System.out.println("The current user has token: " + token);
             } catch (Exception e) {
-                System.out.println("Unable to get JWT Token: " + e.getMessage());
+                System.out.println("Unable to get/validate JWT Token: " + e.getMessage());
             }
         } else {
             // For anonymous users, proceed without checking the token
             System.out.println("No or invalid Authorization header for this request. Proceeding for anonymous user.");
+            System.out.println("Header names: " + request.getHeaderNames());
             filterChain.doFilter(request, response);
         }
     }

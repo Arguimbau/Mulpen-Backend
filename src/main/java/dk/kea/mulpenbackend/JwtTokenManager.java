@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -37,12 +38,24 @@ public class JwtTokenManager {
         return Keys.hmacShaKeyFor(keyBytes);
     }
     public Boolean validateJwtToken(String token, UserDetails userDetails) {
-        System.out.println("TokenManager validateJwtToken(String token, UserDetails) With token: Call: B");
         String username = getUsernameFromToken(token);
         Claims claims = getClaims(token);
         Boolean isTokenExpired = claims.getExpiration().before(new Date());
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired);
+
+        if (username.equals(userDetails.getUsername()) && !isTokenExpired) {
+            // Check roles for authorization
+            List<String> roles = (List<String>) claims.get("roles");
+            // Replace "ROLE_ADMIN" with the actual role you want to check for
+            if (roles.contains("ROLE_ADMIN")) {
+                // User has the required role for authorization
+                return true;
+            }
+        }
+        return false;
     }
+
+
+
     public String getUsernameFromToken(String token) {
         System.out.println("TokenManager getUsernameFromToken(String token) With token: Call: A");
         //Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody(); // before Spring 3
