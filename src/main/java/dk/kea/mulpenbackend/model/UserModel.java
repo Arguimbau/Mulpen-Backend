@@ -24,6 +24,7 @@ public class UserModel
     private String title;
     private String email;
     private String filePath;
+    private String phoneNumber;
     private String type;
 
     public UserModel(String username, String password) {

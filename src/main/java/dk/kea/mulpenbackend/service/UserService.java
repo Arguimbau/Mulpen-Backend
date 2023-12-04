@@ -2,7 +2,6 @@ package dk.kea.mulpenbackend.service;
 
 
 import dk.kea.mulpenbackend.config.SecurityConfiguration;
-import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -44,7 +43,8 @@ public class UserService implements IUserService{
 
         PasswordEncoder pw = SecurityConfiguration.passwordEncoder();
         user.setPassword(pw.encode(user.getPassword()));
-        user.setName(user.getUsername());
+        user.setUsername(user.getUsername());
+        user.setName(user.getName());
         user.setEmail(user.getEmail());
         user.setTitle(user.getTitle());
         return userRepository.save(user);
