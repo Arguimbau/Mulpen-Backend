@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 
+// hello
 @Controller
 @EnableWebMvc
 public class ViewController {
