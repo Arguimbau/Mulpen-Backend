@@ -3,75 +3,39 @@ package dk.kea.mulpenbackend.api;
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.service.MediaService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.List;
 
-@RequestMapping("/media")
-@CrossOrigin
 @RestController
-public class MediaController {
+@RequestMapping("/slideshow")
+@CrossOrigin
+public class SlideshowController {
+
     private final ConfigProvider configProvider;
 
     @Autowired
     private MediaService mediaService;
 
-
     @Autowired
-    public MediaController(ConfigProvider configProvider) {
+    public SlideshowController(ConfigProvider configProvider) {
         this.configProvider = configProvider;
     }
 
-    /*
-    @GetMapping()
-    public ResponseEntity<Void> getVideos() {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("viewVideo.html"));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
-    }
-
-     */
-
-    @GetMapping("/upload/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        String safeFileName = FilenameUtils.getName(filename);
-        Path filePath = Paths.get(configProvider.uploadDirectory, safeFileName);
-        Resource resource = new org.springframework.core.io.PathResource(filePath);
-
-        try {
-            // Set content-type dynamically based on the file type
-            String contentType = Files.probeContentType(filePath);
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    //.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).build();
-        }
-    }
-
-    private String[] badExtensions = {"java", "htm", "html"};
-    private String[] allowedExtensions = {
-            "jpg", "png", "jpeg", "gif",
-            "mp4", "mov", "mkv", "avi", "mp3", "wav", "flac", "webm", "webp"
+    private final String[] badExtensions = {"java", "htm", "html"};
+    private final String[] allowedExtensions = {
+            "jpg", "png", "jpeg"
     };
 
-    @PostMapping("/upload")
+    @PostMapping("/uploadSlideshow")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
 
         if (file.isEmpty()) {
@@ -96,7 +60,7 @@ public class MediaController {
                 return ResponseEntity.badRequest().body("File type not allowed");
             }
 
-            Path uploadPath = Paths.get(configProvider.uploadDirectory, safeFileName);
+            Path uploadPath = Paths.get(configProvider.slideshowDirectory, safeFileName);
 
             mediaModel.setFilePath(safeFileName);
             mediaModel.setDescription(description);
@@ -111,13 +75,4 @@ public class MediaController {
             return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
         }
     }
-
-
-
-
-    @GetMapping("/all")
-    public List<MediaModel> getAllMedia() {
-        return mediaService.getAllMedia();
-    }
 }
-
