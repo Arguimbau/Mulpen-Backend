@@ -33,9 +33,10 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/admin")
+    @GetMapping("/dashboard")
     public void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String token = request.getHeader("Forward Dashboard Authorization");
+        System.out.println("Received token: " + token);
         ServletContext context = request.getServletContext();
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");
         requestDispatcher.forward(request, response);
@@ -44,6 +45,7 @@ public class ViewController {
     //about
     //contact
     //home
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/opretBruger")
     public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
@@ -57,7 +59,13 @@ public class ViewController {
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/login.html");
         requestDispatcher.forward(request, response);
     }
-
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/sletBruger")
+    public void forwardToDeleteUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/deleteUser.html");
+        requestDispatcher.forward(request, response);
+    }
 
     @GetMapping("/")
     public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

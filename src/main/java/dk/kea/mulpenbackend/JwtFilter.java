@@ -6,6 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @AllArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     private JwtUserDetailsService userDetailsService;
@@ -24,11 +27,13 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        System.out.println("JwtFilter doFilterInternal start - request header: " + request.getHeader("Authorization"));
         String tokenHeader = request.getHeader("Authorization");
         System.out.println("JwtFilter doFilterInternal call 3 request header: " + tokenHeader);
 
         if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
             String token = tokenHeader.substring(7);
+            System.out.println("Token extracted: " + token);
             try {
                 String username = jwtTokenManager.getUsernameFromToken(token);
                 validateToken(request, username, token);
