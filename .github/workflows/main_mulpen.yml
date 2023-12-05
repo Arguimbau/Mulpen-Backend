@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SECRET: ${{ Production.SECRET }}
+      SECRET: ${{ secrets.Production_SECRET }}
       FRONTEND_DIRECTORY_PATH: ${{ secrets.Production_FRONTEND_DIRECTORY_PATH }}
       JDBC_DATABASE_URL: ${{ secrets.Production_JDBC_DATABASE_URL }}
       JDBC_DATABASE_USERNAME: ${{ secrets.Production_DATABASE_USERNAME }}
