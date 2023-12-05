@@ -74,4 +74,11 @@ public class ViewController {
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
         requestDispatcher.forward(request, response);
     }
+
+    @GetMapping("/uploadSlideshow")
+    public void forwardToUploadSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
+        requestDispatcher.forward(request, response);
+    }
 }
