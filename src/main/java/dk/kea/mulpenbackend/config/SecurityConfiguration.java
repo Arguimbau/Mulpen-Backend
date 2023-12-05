@@ -45,7 +45,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         http
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin", "/upload").authenticated()
+                        .requestMatchers("/dashboard", "/opretBruger", "/sletbruger" , "/upload").authenticated()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
