@@ -14,7 +14,14 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SECRET: bigballerMulpenakjwhdaikwhdawawdjaowjdwOAJOAJDOAJDoawjdoajdoajwdoajdoajwdoajwdoajdhdaiwhdaihdiauwdhaiuwhdiawhdiawhdaiwuhd
+      SECRET: ${{ secrets.Production_SECRET }}
+      FRONTEND_DIRECTORY_PATH: ${{ secrets.Production_FRONTEND_DIRECTORY_PATH }}
+      JDBC_DATABASE_URL: ${{ secrets.Production_JDBC_DATABASE_URL }}
+      JDBC_DATABASE_USERNAME: ${{ secrets.Production_DATABASE_USERNAME }}
+      JDBC_DATABASE_PASSWORD: ${{ secrets.Production_JDBC_DATABASE_PASSWORD }}
+      MEDIA_FILE_PATH: ${{ secrets.Production_MEDIA_FILE_PATH }}
+      PROFILE_FILE_PATH: ${{ secrets.Production_PROFILE_FILE_PATH }}
+      SLIDESHOW_FILE_PATH: ${{ secrets.Production_SLIDESHOW_FILE_PATH }}
 
     steps:
       - uses: actions/checkout@v3
@@ -40,13 +47,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: java-app
-      
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2

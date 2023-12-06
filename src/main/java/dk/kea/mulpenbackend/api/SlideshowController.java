@@ -38,7 +38,7 @@ public class SlideshowController {
     };
 
     @PostMapping("/uploadSlideshow")
-    public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
+    public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a file to upload");
@@ -65,7 +65,6 @@ public class SlideshowController {
             Path uploadPath = Paths.get(configProvider.slideshowDirectory, safeFileName);
 
             mediaModel.setFilePath(safeFileName);
-            mediaModel.setDescription(description);
 
             Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
 

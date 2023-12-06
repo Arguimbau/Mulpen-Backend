@@ -14,71 +14,70 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 
-// hello
 @Controller
 @EnableWebMvc
 public class ViewController {
 
-    @GetMapping("/videos")
-    public void forwardToViewVideoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/viewVideo.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/videos")
+  public void forwardToViewVideoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/viewVideo.html");
+    requestDispatcher.forward(request, response);
+  }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/upload")
-    public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadMedia.html");
-        requestDispatcher.forward(request, response);
-    }
+  @PreAuthorize("hasRole('USER')")
+  @GetMapping("/upload")
+  public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadMedia.html");
+    requestDispatcher.forward(request, response);
+  }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/admin")
-    public void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");
-        requestDispatcher.forward(request, response);
-    }
+  @PreAuthorize("hasRole('USER')")
+  @GetMapping("/admin")
+  public void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");
+    requestDispatcher.forward(request, response);
+  }
 
-    //about
-    //contact
-    //home
+  //about
+  //contact
+  //home
 
-    @GetMapping("/login")
-    public void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/login.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/login")
+  public void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/login.html");
+    requestDispatcher.forward(request, response);
+  }
 
 
-    @GetMapping("/")
-    public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/index.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/")
+  public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/index.html");
+    requestDispatcher.forward(request, response);
+  }
 
-    @GetMapping("/about")
-    public void forwardToAboutPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/about.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/about")
+  public void forwardToAboutPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/about.html");
+    requestDispatcher.forward(request, response);
+  }
 
-    @GetMapping("/contact")
-    public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/contact")
+  public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
+    requestDispatcher.forward(request, response);
+  }
 
-    @GetMapping("/uploadSlideshow")
-    public void forwardToUploadSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/uploadSlideshow")
+  public void forwardToUploadSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
+    requestDispatcher.forward(request, response);
+  }
 }

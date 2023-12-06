@@ -18,41 +18,42 @@ import java.io.IOException;
 @AllArgsConstructor
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-    private JwtUserDetailsService userDetailsService;
-    private JwtTokenManager jwtTokenManager;
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        String tokenHeader = request.getHeader("Authorization");
-        System.out.println("JwtFilter doFilterInternal call 3 request header: " + tokenHeader);
+  private JwtUserDetailsService userDetailsService;
+  private JwtTokenManager jwtTokenManager;
 
-        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
-            String token = tokenHeader.substring(7);
-            try {
-                String username = jwtTokenManager.getUsernameFromToken(token);
-                validateToken(request, username, token);
-            } catch (Exception e) {
-                System.out.println("Unable to get JWT Token: " + e.getMessage());
-            }
-        } else {
-            // For anonymous users, proceed without checking the token
-            System.out.println("No or invalid Authorization header for this request. Proceeding for anonymous user.");
-            filterChain.doFilter(request, response);
-        }
-    }
+  @Override
+  protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response, FilterChain filterChain)
+    throws ServletException, IOException {
+    String tokenHeader = request.getHeader("Authorization");
+    System.out.println("JwtFilter doFilterInternal call 3 request header: " + tokenHeader);
 
-    private void validateToken(HttpServletRequest request, String username, String token) {
-        if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtTokenManager.validateJwtToken(token, userDetails)) {
-                UsernamePasswordAuthenticationToken
-                        authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null,
-                        userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
-        }
+    if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
+      String token = tokenHeader.substring(7);
+      try {
+        String username = jwtTokenManager.getUsernameFromToken(token);
+        validateToken(request, username, token);
+      } catch (Exception e) {
+        System.out.println("Unable to get JWT Token: " + e.getMessage());
+      }
+    } else {
+      // For anonymous users, proceed without checking the token
+      System.out.println("No or invalid Authorization header for this request. Proceeding for anonymous user.");
+      filterChain.doFilter(request, response);
     }
+  }
+
+  private void validateToken(HttpServletRequest request, String username, String token) {
+    if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
+      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+      if (jwtTokenManager.validateJwtToken(token, userDetails)) {
+        UsernamePasswordAuthenticationToken
+          authenticationToken = new UsernamePasswordAuthenticationToken(
+          userDetails, null,
+          userDetails.getAuthorities());
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+      }
+    }
+  }
 }
