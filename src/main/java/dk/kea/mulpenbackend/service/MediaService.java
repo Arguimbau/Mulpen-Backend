@@ -1,4 +1,4 @@
-package dk.kea.mulpenbackend.Service;
+package dk.kea.mulpenbackend.service;
 
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.Entity.MediaModel;

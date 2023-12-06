@@ -2,7 +2,7 @@ package dk.kea.mulpenbackend.api;
 
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.Entity.MediaModel;
-import dk.kea.mulpenbackend.Service.MediaService;
+import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;

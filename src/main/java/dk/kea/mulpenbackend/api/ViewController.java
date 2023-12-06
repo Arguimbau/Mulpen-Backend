@@ -87,4 +87,10 @@ public class ViewController {
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
         requestDispatcher.forward(request, response);
     }
+    @GetMapping("/slet")
+    public void forwardToDeletePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/delete.html");
+        requestDispatcher.forward(request, response);
+    }
 }
