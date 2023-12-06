@@ -6,10 +6,13 @@ import dk.kea.mulpenbackend.service.MediaService;
 import dk.kea.mulpenbackend.service.SlideshowService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +39,28 @@ public class SlideshowController {
     private final String[] allowedExtensions = {
             "jpg", "png", "jpeg"
     };
+
+
+
+    @GetMapping("/uploadSlideshow/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        String safeFileName = FilenameUtils.getName(filename);
+        Path filePath = Paths.get(configProvider.uploadDirectory, safeFileName);
+        Resource resource = new org.springframework.core.io.PathResource(filePath);
+
+        try {
+            // Set content-type dynamically based on the file type
+            String contentType = Files.probeContentType(filePath);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    //.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
     @PostMapping("/uploadSlideshow")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
