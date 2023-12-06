@@ -2,6 +2,7 @@ package dk.kea.mulpenbackend.config;
 
 import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.repository.UserRepository;
+import dk.kea.mulpenbackend.service.MediaService;
 import dk.kea.mulpenbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +17,9 @@ public class InitData implements CommandLineRunner
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    MediaService mediaService;
 
     @Override
     public void run(String... args) throws Exception
@@ -64,5 +68,7 @@ public class InitData implements CommandLineRunner
         user5.setEmail("gustav@mulpen.dk");
         user5.setFilePath("images/profile4.jpg");
         userService.save(user5);
+
+        mediaService.addExistingMedia();
     }
 }
