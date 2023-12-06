@@ -1,11 +1,13 @@
 package dk.kea.mulpenbackend;
 
-import dk.kea.mulpenbackend.Service.JwtUserDetailsService;
+import dk.kea.mulpenbackend.service.JwtUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @AllArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     private JwtUserDetailsService userDetailsService;
@@ -24,22 +27,24 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        System.out.println("JwtFilter doFilterInternal start - request header: " + request.getHeader("Authorization"));
         String tokenHeader = request.getHeader("Authorization");
-        System.out.println("JwtFilter doFilterInternal call 3 request header" + tokenHeader ); // + JwtController.printHeader(request)
-        String username = null;
-        String token = null;
+        System.out.println("JwtFilter doFilterInternal call 3 request header: " + tokenHeader);
+
         if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
-            token = tokenHeader.substring(7);
+            String token = tokenHeader.substring(7);
+            System.out.println("Token extracted: " + token);
             try {
-                username = jwtTokenManager.getUsernameFromToken(token);
+                String username = jwtTokenManager.getUsernameFromToken(token);
+                validateToken(request, username, token);
             } catch (Exception e) {
-                System.out.println("Unable to get JWT Token");
+                System.out.println("Unable to get JWT Token: " + e.getMessage());
             }
         } else {
-            System.out.println("String does not start with Bearer or tokenheader == NULL");
+            // For anonymous users, proceed without checking the token
+            System.out.println("No or invalid Authorization header for this request. Proceeding for anonymous user.");
+            filterChain.doFilter(request, response);
         }
-        validateToken(request, username, token);
-        filterChain.doFilter(request, response); //possible: response.setHeader( "key",value); its up to you.
     }
 
     private void validateToken(HttpServletRequest request, String username, String token) {

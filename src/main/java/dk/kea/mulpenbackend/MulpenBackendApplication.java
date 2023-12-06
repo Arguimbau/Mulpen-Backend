@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
 @SpringBootApplication
-@ComponentScan(basePackages = {"dk.kea.mulpenbackend.api", "dk.kea.mulpenbackend.Service", "dk.kea.mulpenbackend.config", "dk.kea.mulpenbackend.Repository"})
+@ComponentScan(basePackages = {"dk.kea.mulpenbackend", "dk.kea.mulpenbackend.api", "dk.kea.mulpenbackend.service", "dk.kea.mulpenbackend.config", "dk.kea.mulpenbackend.repository"})
 public class MulpenBackendApplication {
 
 	public static void main(String[] args) {
