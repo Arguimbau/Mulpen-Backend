@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,44 +63,48 @@ public class SlideshowController {
   }
 
   @PostMapping("/uploadSlideshow")
-  public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
-
-    if (file.isEmpty()) {
-      return ResponseEntity.badRequest().body("Please select a file to upload");
+  public ResponseEntity<String> handleFileUpload(@RequestPart("files") List<MultipartFile> files) {
+    if (files.isEmpty()) {
+      return ResponseEntity.badRequest().body("Please select at least one file to upload");
     }
 
+    List<String> successfullyUploadedFiles = new ArrayList<>();
 
-    try {
-
-      SlideshowModel slideshowModel = new SlideshowModel();
-      String safeFileName = FilenameUtils.getName(file.getOriginalFilename());
-      String extension = FilenameUtils.getExtension(safeFileName);
-      if (extension == null) {
-        return ResponseEntity.badRequest().body("File type not allowed");
+    for (MultipartFile file : files) {
+      if (file.isEmpty()) {
+        // You may want to handle this case differently, depending on your requirements.
+        continue;
       }
 
-      extension = extension.toLowerCase();
-      if (Arrays.asList(badExtensions).contains(extension)) {
-        return ResponseEntity.badRequest().body("File type not allowed");
+      try {
+        SlideshowModel slideshowModel = new SlideshowModel();
+        String safeFileName = FilenameUtils.getName(file.getOriginalFilename());
+        String extension = FilenameUtils.getExtension(safeFileName);
+
+        if (extension == null || Arrays.asList(badExtensions).contains(extension) || !Arrays.asList(allowedExtensions).contains(extension)) {
+          // Handle invalid file types
+          continue;
+        }
+
+        Path uploadPath = Paths.get(configProvider.slideshowDirectory, safeFileName);
+        slideshowModel.setFilePath(safeFileName);
+        Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+        slideshowService.saveSlideshow(slideshowModel);
+
+        successfullyUploadedFiles.add(safeFileName);
+      } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
       }
-      if (!Arrays.asList(allowedExtensions).contains(extension)) {
-        return ResponseEntity.badRequest().body("File type not allowed");
-      }
+    }
 
-      Path uploadPath = Paths.get(configProvider.slideshowDirectory, safeFileName);
-
-      slideshowModel.setFilePath(safeFileName);
-
-      Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-
-      slideshowService.saveSlideshow(slideshowModel);
-
-      return ResponseEntity.ok("File upload successful: " + safeFileName);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
+    if (!successfullyUploadedFiles.isEmpty()) {
+      return ResponseEntity.ok("File upload successful: " + String.join(", ", successfullyUploadedFiles));
+    } else {
+      return ResponseEntity.badRequest().body("No valid files were uploaded");
     }
   }
+
 
   @GetMapping("/all")
   public List<SlideshowModel> getAllMedia() {
