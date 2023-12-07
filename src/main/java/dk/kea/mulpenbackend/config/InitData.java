@@ -12,26 +12,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitData implements CommandLineRunner {
 
-    @Autowired
-    UserRepository userRepository;
+  @Autowired
+  UserRepository userRepository;
 
-    @Autowired
-    UserService userService;
+  @Autowired
+  UserService userService;
 
-    @Autowired
-    MediaService mediaService;
+  @Autowired
+  MediaService mediaService;
 
-    @Autowired
-    SlideshowService slideshowService;
+  @Autowired
+  SlideshowService slideshowService;
 
-    @Override
-    public void run(String... args) throws Exception {
-        UserModel user = new UserModel();
-        user.setPassword("1234");
-        user.setUsername("admin");
-        userService.save(user);
+  @Override
+  public void run(String... args) throws Exception {
+    UserModel user = new UserModel();
+    user.setPassword("1234");
+    user.setUsername("admin");
+    userService.save(user);
 
-        mediaService.addExistingMedia();
-        slideshowService.addExistingSlideshow();
-    }
+    mediaService.addExistingMedia();
+    slideshowService.addExistingSlideshow();
+  }
 }

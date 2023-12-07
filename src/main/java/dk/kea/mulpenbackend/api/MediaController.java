@@ -113,8 +113,6 @@ public class MediaController {
   }
 
 
-
-
   @GetMapping("/all")
   public List<MediaModel> getAllMedia() {
     return mediaService.getAllMedia();
