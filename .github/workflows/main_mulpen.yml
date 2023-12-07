@@ -21,6 +21,7 @@ jobs:
       JDBC_DATABASE_PASSWORD: ${{ secrets.Production_JDBC_DATABASE_PASSWORD }}
       MEDIA_FILE_PATH: ${{ secrets.Production_MEDIA_FILE_PATH }}
       PROFILE_FILE_PATH: ${{ secrets.Production_PROFILE_FILE_PATH }}
+      SLIDESHOW_FILE_PATH: ${{ secrets.Production_SLIDESHOW_FILE_PATH }}
 
     steps:
       - uses: actions/checkout@v3

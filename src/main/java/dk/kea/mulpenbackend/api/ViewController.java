@@ -45,13 +45,6 @@ public class ViewController {
     //about
     //contact
     //home
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/opretBruger")
-    public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/createUser.html");
-        requestDispatcher.forward(request, response);
-    }
 
     @GetMapping("/login")
     public void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,13 +52,7 @@ public class ViewController {
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/login.html");
         requestDispatcher.forward(request, response);
     }
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/sletBruger")
-    public void forwardToDeleteUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/deleteUser.html");
-        requestDispatcher.forward(request, response);
-    }
+
 
     @GetMapping("/")
     public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -81,10 +68,17 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @GetMapping("/contact")
-    public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/contact")
+  public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
+    requestDispatcher.forward(request, response);
+  }
+
+  @GetMapping("/uploadSlideshow")
+  public void forwardToUploadSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
+    requestDispatcher.forward(request, response);
+  }
 }
