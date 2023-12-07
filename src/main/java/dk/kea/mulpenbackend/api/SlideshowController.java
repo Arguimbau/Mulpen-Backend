@@ -2,6 +2,7 @@ package dk.kea.mulpenbackend.api;
 
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.model.MediaModel;
+import dk.kea.mulpenbackend.model.SlideshowModel;
 import dk.kea.mulpenbackend.service.SlideshowService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class SlideshowController {
 
     try {
 
-      MediaModel mediaModel = new MediaModel();
+      SlideshowModel slideshowModel = new SlideshowModel();
       String safeFileName = FilenameUtils.getName(file.getOriginalFilename());
       String extension = FilenameUtils.getExtension(safeFileName);
       if (extension == null) {
@@ -87,11 +88,11 @@ public class SlideshowController {
 
       Path uploadPath = Paths.get(configProvider.slideshowDirectory, safeFileName);
 
-      mediaModel.setFilePath(safeFileName);
+      slideshowModel.setFilePath(safeFileName);
 
       Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
 
-      slideshowService.saveSlideshow(mediaModel);
+      slideshowService.saveSlideshow(slideshowModel);
 
       return ResponseEntity.ok("File upload successful: " + safeFileName);
     } catch (Exception e) {
@@ -101,7 +102,7 @@ public class SlideshowController {
   }
 
   @GetMapping("/all")
-  public List<MediaModel> getAllMedia() {
+  public List<SlideshowModel> getAllMedia() {
     return slideshowService.getAllSlideshow();
   }
 }
