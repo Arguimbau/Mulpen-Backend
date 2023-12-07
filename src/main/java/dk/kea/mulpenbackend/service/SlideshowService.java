@@ -1,6 +1,7 @@
 package dk.kea.mulpenbackend.service;
 
 import dk.kea.mulpenbackend.model.MediaModel;
+import dk.kea.mulpenbackend.model.SlideshowModel;
 import dk.kea.mulpenbackend.repository.SlideshowRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,12 @@ public class SlideshowService {
     this.slideshowRepository = slideshowRepository;
   }
 
-  public List<MediaModel> getAllSlideshow() {
+  public List<SlideshowModel> getAllSlideshow() {
     return slideshowRepository.findAll();
   }
 
-  public void saveSlideshow(MediaModel mediaItem) {
-    slideshowRepository.save(mediaItem);
+  public void saveSlideshow(SlideshowModel slideshowModel) {
+    slideshowRepository.save(slideshowModel);
   }
 
   public Resource loadSlideshowAsResource(String fileName) throws IOException {
@@ -59,14 +60,14 @@ public class SlideshowService {
         String fileName = slideshowFilePath.getFileName().toString();
 
         if (!slideshowRepository.existsByFilePath("slideshow/" + fileName)) {
-          MediaModel media = new MediaModel();
-          media.setFilePath(fileName);
+          SlideshowModel slideshowModel = new SlideshowModel();
+          slideshowModel.setFilePath(fileName);
 
           String fileExtension = FilenameUtils.getExtension(fileName).toLowerCase();
 
-          media.setType(fileExtension);
+          slideshowModel.setType(fileExtension);
 
-          saveSlideshow(media);
+          saveSlideshow(slideshowModel);
         }
       }
       return ResponseEntity.ok("Existing media files added to database.");
