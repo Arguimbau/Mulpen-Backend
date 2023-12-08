@@ -1,4 +1,4 @@
-package dk.kea.mulpenbackend.Entity;
+package dk.kea.mulpenbackend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,13 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "media")
-public class MediaModel {
+@Table(name = "slideshow_images")
+public class SlideshowModel {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String type;
   private String filePath;
-  private String description;
 }

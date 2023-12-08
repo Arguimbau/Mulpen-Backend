@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JwtRequestModel  {
-    private String username;
-    private String password;
+public class JwtRequestModel {
+  private String username;
+  private String password;
 }

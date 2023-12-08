@@ -1,7 +1,7 @@
 package dk.kea.mulpenbackend.service;
 
 import dk.kea.mulpenbackend.config.ConfigProvider;
-import dk.kea.mulpenbackend.Entity.MediaModel;
+import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.Repository.MediaRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Service
 public class MediaService {
 

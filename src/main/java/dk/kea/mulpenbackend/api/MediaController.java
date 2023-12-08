@@ -1,7 +1,7 @@
 package dk.kea.mulpenbackend.api;
 
 import dk.kea.mulpenbackend.config.ConfigProvider;
-import dk.kea.mulpenbackend.Entity.MediaModel;
+import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -122,5 +122,6 @@ public class MediaController {
         mediaService.deleteMedia(id);
         return ResponseEntity.ok("File deleted");
     }
+
 }
 

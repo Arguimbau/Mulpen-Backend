@@ -81,12 +81,19 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @GetMapping("/contact")
-    public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
-        requestDispatcher.forward(request, response);
-    }
+  @GetMapping("/contact")
+  public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
+    requestDispatcher.forward(request, response);
+  }
+
+  @GetMapping("/uploadSlideshow")
+  public void forwardToUploadSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    ServletContext context = request.getServletContext();
+    RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
+    requestDispatcher.forward(request, response);
+  }
     @GetMapping("/slet")
     public void forwardToDeletePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();

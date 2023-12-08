@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class JwtResponseModel  {
-    private final String token;
+public class JwtResponseModel {
+  private final String token;
 }
