@@ -4,24 +4,18 @@ package dk.kea.mulpenbackend.config;
 import dk.kea.mulpenbackend.JwtAuthenticationEntryPoint;
 import dk.kea.mulpenbackend.JwtFilter;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -45,7 +39,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         http
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/dashboard", "/opretBruger", "/sletbruger" , "/upload").authenticated()
+                        //.requestMatchers("/dashboard", "/opretBruger", "/sletbruger" , "/upload").authenticated()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

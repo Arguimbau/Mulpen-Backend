@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class SlideshowService {
 
   SlideshowRepository slideshowRepository;
-
+  @Autowired
   ConfigProvider configProvider;
 
   @Autowired
@@ -87,7 +87,7 @@ public class SlideshowService {
     if (optionalSlideshow.isPresent()) {
       SlideshowModel slideshowModel = optionalSlideshow.get();
 
-      // Delete file from the "media" directory
+      // Delete file from the "slideshow" directory
       String filePath = slideshowModel.getFilePath();
       File file = new File(configProvider.slideshowDirectory, filePath);
 
