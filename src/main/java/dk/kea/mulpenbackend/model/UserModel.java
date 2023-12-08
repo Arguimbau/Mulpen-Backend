@@ -26,6 +26,11 @@ public class UserModel implements UserDetails
     private String username;
     private String password;
 
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<String> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Assuming roles is a Set<String> in your UserModel
@@ -53,14 +58,6 @@ public class UserModel implements UserDetails
     public boolean isEnabled() {
         return true;
     }
-
-
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<String> roles;
-
-
 
     public UserModel(String username, String password, Set<String> roles) {
         this.username=username;

@@ -34,7 +34,7 @@ public class ViewController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/dashboard")
     public void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");

@@ -24,13 +24,17 @@ public class JwtTokenManager {
     private String jwtSecret;
     public String generateJwtToken(UserDetails userDetails) {
         System.out.println("TokenManager generateJwtToken(UserDetails) call: 7");
+
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername())
+        claims.put("roles", userDetails.getAuthorities()); // Assuming getAuthorities() returns a Collection<GrantedAuthority>
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY ))
-                .signWith(getSignInKey(),SignatureAlgorithm.HS512 )
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS512)
                 .compact();
-                //.signWith(SignatureAlgorithm.HS512, jwtSecret).compact(); // before Spring 3
     }
 
     private Key getSignInKey() {
@@ -45,10 +49,24 @@ public class JwtTokenManager {
         if (username.equals(userDetails.getUsername()) && !isTokenExpired) {
             // Check roles for authorization
             List<String> roles = (List<String>) claims.get("roles");
+
+            System.out.println("Roles attached to the current JWT token: " + roles);
             // Replace "ROLE_ADMIN" with the actual role you want to check for
-            if (roles.contains("ROLE_ADMIN")) {
+            if (containsAnyRole(roles, "ROLE_USER", "ROLE_ADMIN")) {
                 // User has the required role for authorization
                 return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean containsAnyRole(List<String> roles, String... requiredRoles) {
+        if (roles != null && requiredRoles != null) {
+            for (String requiredRole : requiredRoles) {
+                if (roles.contains(requiredRole)) {
+                    return true;
+                }
             }
         }
         return false;

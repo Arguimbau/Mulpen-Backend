@@ -28,7 +28,11 @@ public class InitData implements CommandLineRunner
         UserModel user = new UserModel();
         user.setPassword("1234");
         user.setUsername("admin");
-        user.setRoles(Set.of("ROLE_USER", "ROLE_ADMIN"));
+        user.setRoles(Set.of("USER", "ADMIN"));
+
+
+
+
         userService.save(user);
 
         mediaService.addExistingMedia();

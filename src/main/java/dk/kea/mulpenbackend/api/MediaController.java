@@ -5,8 +5,11 @@ import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
@@ -20,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequestMapping("/media")
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 public class MediaController {
     private final ConfigProvider configProvider;
@@ -74,6 +77,10 @@ public class MediaController {
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
 
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccessControlAllowOrigin("*");
+
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a file to upload");
         }
@@ -105,7 +112,7 @@ public class MediaController {
 
             mediaService.saveMedia(mediaModel);
 
-            return ResponseEntity.ok("File upload successful: " + safeFileName);
+            return new ResponseEntity<>("File upload successful: " + safeFileName, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
