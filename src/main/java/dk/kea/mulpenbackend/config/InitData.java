@@ -2,15 +2,16 @@ package dk.kea.mulpenbackend.config;
 
 import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.repository.UserRepository;
-import dk.kea.mulpenbackend.service.UserService;
 import dk.kea.mulpenbackend.service.MediaService;
+import dk.kea.mulpenbackend.service.UserService;
 import dk.kea.mulpenbackend.service.SlideshowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InitData implements CommandLineRunner {
+public class InitData implements CommandLineRunner
+{
 
     @Autowired
     UserRepository userRepository;
@@ -25,14 +26,18 @@ public class InitData implements CommandLineRunner {
     SlideshowService slideshowService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) throws Exception
+    {
+        mediaService.addExistingMedia();
+        slideshowService.addExistingSlideshow();
+
+
+
         UserModel user = new UserModel();
         user.setPassword("1234");
         user.setUsername("admin");
         userService.save(user);
 
-        mediaService.addExistingMedia();
-        slideshowService.addExistingSlideshow();
 
         UserModel user2 = new UserModel();
         user2.setPassword("1234");
@@ -73,5 +78,7 @@ public class InitData implements CommandLineRunner {
         user5.setEmail("gustav@mulpen.dk");
         user5.setFilePath("images/Gustav.jpg");
         userService.save(user5);
+
+        mediaService.addExistingMedia();
     }
 }
