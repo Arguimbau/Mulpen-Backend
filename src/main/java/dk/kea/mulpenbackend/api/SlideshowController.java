@@ -22,7 +22,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/slideshow")
-@CrossOrigin
 public class SlideshowController {
 
   private final ConfigProvider configProvider;
