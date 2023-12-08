@@ -1,6 +1,6 @@
 package dk.kea.mulpenbackend.service;
 
-import dk.kea.mulpenbackend.model.MediaModel;
+import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.model.SlideshowModel;
 import dk.kea.mulpenbackend.repository.SlideshowRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -10,12 +10,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 public class SlideshowService {
 
   SlideshowRepository slideshowRepository;
+
+  ConfigProvider configProvider;
 
   @Autowired
   public SlideshowService(SlideshowRepository slideshowRepository) {
@@ -74,6 +78,33 @@ public class SlideshowService {
     } catch (IOException e) {
       e.printStackTrace();
       return ResponseEntity.status(500).body("An error occurred while adding existing media.");
+    }
+  }
+
+  public void deleteSlideshow(Long id) {
+    Optional<SlideshowModel> optionalSlideshow = slideshowRepository.findById(id);
+
+    if (optionalSlideshow.isPresent()) {
+      SlideshowModel slideshowModel = optionalSlideshow.get();
+
+      // Delete file from the "media" directory
+      String filePath = slideshowModel.getFilePath();
+      File file = new File(configProvider.slideshowDirectory, filePath);
+
+      if (file.exists()) {
+        file.delete();
+        if (file == null) {
+          slideshowRepository.deleteById(id);
+          System.out.println("File deleted successfully");
+        } else {
+          System.err.println("Failed to delete the file");
+        }
+      } else {
+        System.err.println("File not found");
+      }
+
+      // Delete the database record
+      slideshowRepository.deleteById(id);
     }
   }
 }

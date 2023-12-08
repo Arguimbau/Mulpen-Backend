@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -104,5 +103,11 @@ public class SlideshowController {
   @GetMapping("/all")
   public List<SlideshowModel> getAllMedia() {
     return slideshowService.getAllSlideshow();
+  }
+
+  @DeleteMapping("/deleteSlideshow/{id}")
+  public ResponseEntity<String> deleteMedia(@PathVariable Long id) {
+    slideshowService.deleteSlideshow(id);
+    return ResponseEntity.ok("File deleted");
   }
 }
