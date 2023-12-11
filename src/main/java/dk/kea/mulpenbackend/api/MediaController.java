@@ -68,7 +68,7 @@ public class MediaController {
   private String[] badExtensions = {"java", "htm", "html"};
   private String[] allowedExtensions = {
     "jpg", "png", "jpeg", "gif",
-    "mp4", "mov", "mkv", "avi", "mp3", "wav", "flac", "webm", "webp"
+    "mp4", "mkv", "avi", "mp3", "wav", "flac", "webm", "webp"
   };
 
   @PostMapping("/upload")
