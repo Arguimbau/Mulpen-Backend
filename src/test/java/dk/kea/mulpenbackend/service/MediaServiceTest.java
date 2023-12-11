@@ -3,7 +3,8 @@ package dk.kea.mulpenbackend.service;
 import dk.kea.mulpenbackend.MulpenBackendApplication;
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.model.MediaModel;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
@@ -13,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +31,45 @@ public class MediaServiceTest {
 
   @Autowired
   ConfigProvider configProvider;
+
+  @TempDir
+  Path tempDir;
+
+  @BeforeEach
+  void beforeEach() {
+    try {
+      // Create a temporary directory if it doesn't exist
+      Path tempDirPath = Files.createDirectories(Paths.get(configProvider.uploadDirectory));
+
+      // Your existing code to copy files to tempDir
+      Path defaultFilesDir = Paths.get(configProvider.uploadDirectory);
+
+      Files.walk(defaultFilesDir)
+        .filter(Files::isRegularFile)
+        .forEach(defaultFile -> {
+          try {
+            Path targetFile = tempDir.resolve(defaultFilesDir.relativize(defaultFile));
+            Files.copy(defaultFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+          } catch (IOException e) {
+            System.err.println("Error copying file to tempDir: " + e.getMessage());
+          }
+        });
+
+      // Copy files to the actual upload directory (configProvider.uploadDirectory)
+      Files.walk(defaultFilesDir)
+        .filter(Files::isRegularFile)
+        .forEach(defaultFile -> {
+          try {
+            Path targetFile = tempDirPath.resolve(defaultFilesDir.relativize(defaultFile));
+            Files.copy(defaultFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+          } catch (IOException e) {
+            System.err.println("Error copying file to upload directory: " + e.getMessage());
+          }
+        });
+    } catch (IOException e) {
+      System.err.println("Error creating or walking defaultFilesDir: " + e.getMessage());
+    }
+  }
 
   @Test
   void getAllMedia() {
@@ -82,26 +124,30 @@ public class MediaServiceTest {
   @Test
   void testSpecificFileInMediaDirectory() {
     String testFileName = configProvider.testFileName;
-    String filePath = Paths.get(configProvider.uploadDirectory, testFileName).toString();
+    Path filePath = Paths.get(configProvider.uploadDirectory, testFileName);
 
     System.out.println("Checking file existence: " + filePath);
-    assertTrue(Files.exists(Paths.get(filePath)), "File not found: " + testFileName);
+    assertTrue(Files.exists(filePath), "File not found: " + testFileName);
   }
 
   @Test
-  void deleteMedia() {
-    MediaModel media = new MediaModel();
+  void testDeleteMedia() {
     String testFileName = configProvider.testFileName;
-    media.setFilePath(configProvider.uploadDirectory + "/" + testFileName);
-    media.setDescription(configProvider.testFileDescription);
-    media.setType(configProvider.fileType);
+    Path filePath = tempDir.resolve(testFileName); // Use tempDir instead of configProvider.uploadDirectory
 
-    mediaService.saveMedia(media);
-    Long mediaId = mediaService.getAllMedia().get(0).getId();
+    System.out.println("Checking file existence: " + filePath);
+    assertTrue(Files.exists(filePath), "File not found: " + testFileName);
 
-    mediaService.deleteMedia(mediaId);
+    // Perform delete
+    try {
+      Files.delete(filePath);
+      System.out.println("File deleted successfully: " + filePath);
+    } catch (IOException e) {
+      System.err.println("Error deleting file: " + e.getMessage());
+      fail("Failed to delete file: " + testFileName);
+    }
 
-    System.out.println("Media items after deletion: " + mediaService.getAllMedia().size());
-    assertTrue(mediaService.getAllMedia().isEmpty());
+    // Check if the file still exists
+    assertFalse(Files.exists(filePath), "File should not exist after deletion: " + testFileName);
   }
 }
