@@ -20,6 +20,7 @@ public class CorsConfig implements WebMvcConfigurer {
 }
 */
 
+/*
 @Configuration
 public class CorsConfig {
     @Bean
@@ -34,6 +35,20 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+}
+
+ */
+
+
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowedHeaders("*");
     }
 }
 // schema://host:port

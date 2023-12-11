@@ -6,14 +6,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenManager {
@@ -48,11 +47,15 @@ public class JwtTokenManager {
 
         if (username.equals(userDetails.getUsername()) && !isTokenExpired) {
             // Check roles for authorization
-            List<String> roles = (List<String>) claims.get("roles");
+            Set<String> roles = (Set<String>) userDetails.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toSet());
 
             System.out.println("Roles attached to the current JWT token: " + roles);
-            // Replace "ROLE_ADMIN" with the actual role you want to check for
-            if (containsAnyRole(roles, "ROLE_USER", "ROLE_ADMIN")) {
+
+            // Replace "USER" and "ADMIN" with the actual roles you want to check for
+            if (containsAnyRole(roles, "USER", "ADMIN")) {
                 // User has the required role for authorization
                 return true;
             }
@@ -61,9 +64,10 @@ public class JwtTokenManager {
     }
 
 
-    private boolean containsAnyRole(List<String> roles, String... requiredRoles) {
+    private boolean containsAnyRole(Set<String> roles, String... requiredRoles) {
         if (roles != null && requiredRoles != null) {
             for (String requiredRole : requiredRoles) {
+                String roleToCheck = "ROLE_" + requiredRole;
                 if (roles.contains(requiredRole)) {
                     return true;
                 }

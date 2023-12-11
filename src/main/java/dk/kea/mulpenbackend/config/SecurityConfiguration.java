@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -43,9 +45,10 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors().and().csrf().disable()
+                .cors().disable().csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("media/upload").authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/media/upload", HttpMethod.OPTIONS.name())).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/media/upload")).authenticated()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

@@ -74,9 +74,11 @@ public class MediaController {
             "mp4", "mov", "mkv", "avi", "mp3", "wav", "flac", "webm", "webp"
     };
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
 
+        System.out.println("Upload controller executed");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccessControlAllowOrigin("*");
