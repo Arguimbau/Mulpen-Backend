@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequestMapping("/media")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 public class MediaController {
     private final ConfigProvider configProvider;
@@ -74,7 +73,6 @@ public class MediaController {
             "mp4", "mov", "mkv", "avi", "mp3", "wav", "flac", "webm", "webp"
     };
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
 

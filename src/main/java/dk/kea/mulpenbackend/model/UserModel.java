@@ -2,6 +2,7 @@ package dk.kea.mulpenbackend.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="users")
 public class UserModel implements UserDetails
@@ -38,6 +40,13 @@ public class UserModel implements UserDetails
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
     }
+
+    private String name;
+    private String title;
+    private String email;
+    private String filePath;
+    private String phoneNumber;
+    private String type;
 
     @Override
     public boolean isAccountNonExpired() {

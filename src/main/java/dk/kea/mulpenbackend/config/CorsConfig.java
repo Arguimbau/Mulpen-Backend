@@ -39,7 +39,7 @@ public class CorsConfig {
 }
 
  */
-
+/*
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
@@ -51,4 +51,6 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
 }
+
+ */
 // schema://host:port

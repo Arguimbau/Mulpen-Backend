@@ -25,7 +25,6 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/upload")
     public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
@@ -33,14 +32,33 @@ public class ViewController {
         requestDispatcher.forward(request, response);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/dashboard")
-    public void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void forwardToDashboardPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");
         requestDispatcher.forward(request, response);
     }
 
+    @GetMapping("/deleteUser")
+    public void forwardToDeleteUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/deleteUser.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @GetMapping("/createUser")
+    public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/createUser.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @GetMapping("/uploadSlideshow")
+    public void forwardToDeleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
+        requestDispatcher.forward(request, response);
+    }
     //about
     //contact
     //home
