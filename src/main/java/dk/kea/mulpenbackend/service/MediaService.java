@@ -2,7 +2,7 @@ package dk.kea.mulpenbackend.service;
 
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.model.MediaModel;
-import dk.kea.mulpenbackend.Repository.MediaRepository;
+import dk.kea.mulpenbackend.repository.MediaRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
