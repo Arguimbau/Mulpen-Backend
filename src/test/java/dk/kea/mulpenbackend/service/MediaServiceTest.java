@@ -41,9 +41,10 @@ public class MediaServiceTest {
       // Create a temporary directory if it doesn't exist
       Path tempDirPath = Files.createDirectories(Paths.get(configProvider.uploadDirectory));
 
-      // Your existing code to copy files to tempDir
+      // copy files to tempDir (for test purposes)
       Path defaultFilesDir = Paths.get(configProvider.uploadDirectory);
 
+      // Copy files to tempDir for testing
       Files.walk(defaultFilesDir)
         .filter(Files::isRegularFile)
         .forEach(defaultFile -> {
@@ -89,6 +90,7 @@ public class MediaServiceTest {
 
     mediaService.saveMedia(media);
 
+    // Verify that the saved media item exists with the correct properties
     MediaModel savedMedia = mediaService.getAllMedia().stream()
       .filter(m -> testFileName.equals(Paths.get(m.getFilePath()).getFileName().toString()))
       .findFirst()
@@ -121,6 +123,7 @@ public class MediaServiceTest {
     assertEquals("Existing media files added to database.", response.getBody());
   }
 
+  // check the existence of a specific file in the media directory
   @Test
   void testSpecificFileInMediaDirectory() {
     String testFileName = configProvider.testFileName;
@@ -133,7 +136,7 @@ public class MediaServiceTest {
   @Test
   void testDeleteMedia() {
     String testFileName = configProvider.testFileName;
-    Path filePath = tempDir.resolve(testFileName); // Use tempDir instead of configProvider.uploadDirectory
+    Path filePath = tempDir.resolve(testFileName);
 
     System.out.println("Checking file existence: " + filePath);
     assertTrue(Files.exists(filePath), "File not found: " + testFileName);
