@@ -83,10 +83,10 @@ public class MediaServiceTest {
   @Test
   void saveMedia() {
     MediaModel media = new MediaModel();
-    String testFileName = configProvider.testFileName;
+    String testFileName = configProvider.testMediaFileName;
     media.setFilePath(configProvider.uploadDirectory + "/" + testFileName);
     media.setDescription(configProvider.testFileDescription);
-    media.setType(configProvider.fileType);
+    media.setType(configProvider.mediaFileType);
 
     mediaService.saveMedia(media);
 
@@ -100,12 +100,12 @@ public class MediaServiceTest {
     System.out.println("Saved media description: " + savedMedia.getDescription());
     System.out.println("Saved media type: " + savedMedia.getType());
     assertEquals(configProvider.testFileDescription, savedMedia.getDescription());
-    assertEquals(configProvider.fileType, savedMedia.getType());
+    assertEquals(configProvider.mediaFileType, savedMedia.getType());
   }
 
   @Test
   void loadMediaAsResource() throws IOException {
-    Resource resource = mediaService.loadMediaAsResource(configProvider.testFileName);
+    Resource resource = mediaService.loadMediaAsResource(configProvider.testMediaFileName);
 
     assertNotNull(resource);
     System.out.println("Resource exists: " + resource.exists());
@@ -126,7 +126,7 @@ public class MediaServiceTest {
   // check the existence of a specific file in the media directory
   @Test
   void testSpecificFileInMediaDirectory() {
-    String testFileName = configProvider.testFileName;
+    String testFileName = configProvider.testMediaFileName;
     Path filePath = Paths.get(configProvider.uploadDirectory, testFileName);
 
     System.out.println("Checking file existence: " + filePath);
@@ -135,7 +135,7 @@ public class MediaServiceTest {
 
   @Test
   void testDeleteMedia() {
-    String testFileName = configProvider.testFileName;
+    String testFileName = configProvider.testMediaFileName;
     Path filePath = tempDir.resolve(testFileName);
 
     System.out.println("Checking file existence: " + filePath);

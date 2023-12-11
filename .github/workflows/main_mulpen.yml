@@ -22,9 +22,11 @@ jobs:
       MEDIA_FILE_PATH: ${{ secrets.Production_MEDIA_FILE_PATH }}
       PROFILE_FILE_PATH: ${{ secrets.Production_PROFILE_FILE_PATH }}
       SLIDESHOW_FILE_PATH: ${{ secrets.Production_SLIDESHOW_FILE_PATH }}
-      TEST_FILE_NAME: ${{ secrets.Production_TEST_FILE_NAME }}
+      TEST_MEDIA_FILE_NAME: ${{ secrets.Production_TEST_FILE_NAME }}
       MEDIA_FILE_TYPE: ${{ secrets.Production_MEDIA_FILE_TYPE }}
       TEST_FILE_DESCRIPTION: ${{ secrets.Production_TEST_FILE_DESCRIPTION }}
+      TEST_SLIDESHOW_FILE_NAME: ${{ secrets.Production_TEST_SLIDESHOW_FILE_NAME }}
+      SLIDESHOW_FILE_TYPE: ${{ secrets.Production_SLIDESHOW_FILE_TYPE }}
 
     steps:
       - uses: actions/checkout@v3

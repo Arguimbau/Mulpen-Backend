@@ -1,7 +1,5 @@
 package dk.kea.mulpenbackend.config;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,17 +9,24 @@ public class ConfigProvider {
   public String profileDirectory = System.getenv("PROFILE_FILE_PATH");
 
   // dynamic attributes for test media service
-  public String testFileName = System.getenv("TEST_FILE_NAME");
-  public String fileType = System.getenv("MEDIA_FILE_TYPE");
+  public String testMediaFileName = System.getenv("TEST_MEDIA_FILE_NAME");
+  public String mediaFileType = System.getenv("MEDIA_FILE_TYPE");
   public String testFileDescription = System.getenv("TEST_FILE_DESCRIPTION");
 
+  public String testSlideshowFileName = System.getenv("TEST_SLIDESHOW_FILE_NAME");
+
+  public String slideshowFileType = System.getenv("SLIDESHOW_FILE_TYPE");
 
   // dynamic for test filename
-  public String getTestFileName() {
-    return testFileName + "." + fileType;
+  public String getTestMediaFileName() {
+    return testMediaFileName + "." + mediaFileType;
   }
 
   public String getTestFileDescription() {
     return testFileDescription;
+  }
+
+  public String getTestSlideshowFileName() {
+    return testSlideshowFileName + "." + slideshowFileType;
   }
 }
