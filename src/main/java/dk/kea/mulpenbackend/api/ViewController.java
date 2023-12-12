@@ -18,77 +18,87 @@ import java.io.IOException;
 @EnableWebMvc
 public class ViewController {
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/videos")
     public void forwardToViewVideoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/viewVideo.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/viewVideo.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/upload")
     public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadMedia.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/uploadMedia.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/dashboard")
     public void forwardToDashboardPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/dashboard.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/deleteUser")
     public void forwardToDeleteUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/deleteUser.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/deleteUser.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/createUser")
     public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/createUser.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/createUser.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/uploadSlideshow")
     public void forwardToDeleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/uploadSlideshow.html");
         requestDispatcher.forward(request, response);
     }
     //about
     //contact
     //home
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/login")
     public void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/login.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/login.html");
         requestDispatcher.forward(request, response);
     }
 
 
+    //@PreAuthorize("permitAll()")
     @GetMapping("/")
     public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/index.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/index.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/about")
     public void forwardToAboutPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/about.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/about.html");
         requestDispatcher.forward(request, response);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/contact")
     public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/contact.html");
         requestDispatcher.forward(request, response);
     }
 }

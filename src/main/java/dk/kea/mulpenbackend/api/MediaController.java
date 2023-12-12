@@ -54,16 +54,13 @@ public class MediaController {
         Resource resource = new org.springframework.core.io.PathResource(filePath);
 
         try {
-            // Set content-type dynamically based on the file type
-            String contentType = Files.probeContentType(filePath);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(Files.probeContentType(filePath)));
 
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    //.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
+            return ResponseEntity.ok().headers(headers).body(resource);
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
