@@ -1,26 +1,36 @@
 package dk.kea.mulpenbackend.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.dto.JwtRequestModel;
 import dk.kea.mulpenbackend.dto.JwtResponseModel;
 import dk.kea.mulpenbackend.JwtTokenManager;
+import dk.kea.mulpenbackend.model.UserModel;
 import dk.kea.mulpenbackend.service.IUserService;
 import dk.kea.mulpenbackend.service.JwtUserDetailsService;
+import dk.kea.mulpenbackend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 
 
 @RestController
@@ -35,7 +45,7 @@ public class UserController
     @Autowired
     private JwtTokenManager jwtTokenManager;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     private ConfigProvider configProvider;
 

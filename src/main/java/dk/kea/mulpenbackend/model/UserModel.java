@@ -47,13 +47,6 @@ public class UserModel implements UserDetails
                 .collect(Collectors.toSet());
     }
 
-    private String name;
-    private String title;
-    private String email;
-    private String filePath;
-    private String phoneNumber;
-    private String type;
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
