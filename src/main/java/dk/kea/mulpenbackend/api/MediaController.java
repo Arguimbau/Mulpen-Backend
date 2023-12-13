@@ -120,5 +120,12 @@ public class MediaController {
     public List<MediaModel> getAllMedia() {
         return mediaService.getAllMedia();
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteMedia(@PathVariable Long id) {
+        mediaService.deleteMedia(id);
+        return ResponseEntity.ok("File deleted");
+    }
+
 }
 

@@ -11,13 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "media")
-public class MediaModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "slideshow_images")
+public class SlideshowModel {
 
-    private String type;
-    private String filePath;
-    private String description;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private String type;
+  private String filePath;
 }

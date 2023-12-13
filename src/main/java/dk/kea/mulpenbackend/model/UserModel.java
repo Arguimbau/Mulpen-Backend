@@ -27,6 +27,12 @@ public class UserModel implements UserDetails
     private Long id;
     private String username;
     private String password;
+    private String name;
+    private String title;
+    private String email;
+    private String filePath;
+    private String phoneNumber;
+    private String type;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
