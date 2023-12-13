@@ -50,10 +50,16 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
+                        /*
+                        .requestMatchers(HttpMethod.POST, "/media/upload", "/addUser", "/slideshow/uploadSlideshow", "/deleteUser", "/addUser").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/media/delete/**", "/slideshow/deleteSlideshow/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
+
+                         */
                         .requestMatchers("/", "/dashboard", "/login", "/upload", "/media/upload/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/**", "/media/all", "media/upload/**", "media/upload/*").permitAll()
                         .requestMatchers("/images/**", "/font/**", "/objects/**", "/slideshowImages/**", "/html/**", "/css/**", "/js/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/media/upload").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/media/upload").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

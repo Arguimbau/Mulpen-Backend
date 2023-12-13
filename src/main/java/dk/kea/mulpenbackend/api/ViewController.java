@@ -18,6 +18,7 @@ import java.io.IOException;
 @EnableWebMvc
 public class ViewController {
 
+    /// PRODUCTION //////
     @PreAuthorize("permitAll()")
     @GetMapping("/videos")
     public void forwardToViewVideoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,6 +34,16 @@ public class ViewController {
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/uploadMedia.html");
         requestDispatcher.forward(request, response);
     }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("/deleteMedia")
+    public void forwardToDeleteMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/delete-media.html");
+        requestDispatcher.forward(request, response);
+    }
+
+
 
     @PreAuthorize("permitAll()")
     @GetMapping("/dashboard")
@@ -51,6 +62,14 @@ public class ViewController {
     }
 
     @PreAuthorize("permitAll()")
+    @GetMapping("/deleteSlideshow")
+    public void forwardToDeleteSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/deleteSlideshow.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @PreAuthorize("permitAll()")
     @GetMapping("/createUser")
     public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
@@ -59,8 +78,16 @@ public class ViewController {
     }
 
     @PreAuthorize("permitAll()")
+    @GetMapping("/updateAboutUs")
+    public void forwardToUpdateAboutUsPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext context = request.getServletContext();
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/updateAboutUs.html");
+        requestDispatcher.forward(request, response);
+    }
+
+    @PreAuthorize("permitAll()")
     @GetMapping("/uploadSlideshow")
-    public void forwardToDeleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void forwardUploadSlideShow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
         RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/uploadSlideshow.html");
         requestDispatcher.forward(request, response);
