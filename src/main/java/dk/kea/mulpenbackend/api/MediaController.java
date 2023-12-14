@@ -138,6 +138,7 @@ public class MediaController {
             //Set attributes
             fileMediaModel.setFilePath(fileSafeFileName);
             fileMediaModel.setDescription(description);
+            fileMediaModel.setThumbnailFilePath(thumbnailSafeFileName);
 
             thumbnailMediaModel.setFilePath(thumbnailSafeFileName);
             thumbnailMediaModel.setDescription(description);
