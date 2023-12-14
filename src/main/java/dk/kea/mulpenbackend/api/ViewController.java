@@ -28,6 +28,14 @@ public class ViewController {
     }
 
     @PreAuthorize("permitAll()")
+    @GetMapping("/viewMedia")
+    public void forwardToViewMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      ServletContext context = request.getServletContext();
+      RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/viewMedia.html");
+      requestDispatcher.forward(request, response);
+    }
+
+    @PreAuthorize("permitAll()")
     @GetMapping("/upload")
     public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
