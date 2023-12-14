@@ -56,10 +56,11 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .anyRequest().authenticated()
 
                          */
-                        .requestMatchers("/", "/dashboard", "/login", "/upload", "/media/upload/**").permitAll()
+                        .requestMatchers("/", "/dashboard", "/login", "/upload", "/media/upload/**, /deleteMedia").permitAll()
                         .requestMatchers(HttpMethod.GET, "/**", "/media/all", "media/upload/**", "media/upload/*").permitAll()
                         .requestMatchers("/images/**", "/font/**", "/objects/**", "/slideshowImages/**", "/html/**", "/css/**", "/js/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/media/upload").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/media/delete/**", "/deleteMedia").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

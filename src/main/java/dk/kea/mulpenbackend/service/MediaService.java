@@ -50,6 +50,8 @@ public class MediaService {
         }
     }
 
+    public MediaModel findByFilePath(String filePath) {return mediaRepository.findByFilePath(filePath);}
+
     public ResponseEntity<String> addExistingMedia() {
         try {
             String mediaDirectoryPath = System.getenv("MEDIA_FILE_PATH");
