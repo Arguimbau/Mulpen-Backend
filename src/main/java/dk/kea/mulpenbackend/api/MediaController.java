@@ -46,10 +46,22 @@ public class MediaController {
 
      */
 
+
+
     @GetMapping("/upload/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         String safeFileName = FilenameUtils.getName(filename);
-        Path filePath = Paths.get(configProvider.uploadDirectory, safeFileName);
+
+        Path uploadPath = Paths.get(configProvider.uploadDirectory, safeFileName);
+        Path thumbnailPath = Paths.get(configProvider.thumbnailDirectory, safeFileName);
+
+        Path filePath = Files.exists(uploadPath) ? uploadPath : thumbnailPath;
+
+        if (!Files.exists(filePath)) {
+            // Handle the case where the file is not found in both directories
+            return ResponseEntity.notFound().build();
+        }
+
         Resource resource = new org.springframework.core.io.PathResource(filePath);
 
         try {
@@ -72,6 +84,8 @@ public class MediaController {
     private String [] allowedThumbnailExtensions = {
             "jpg", "png", "jpeg"
     };
+
+
 
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestPart("thumbnail") MultipartFile thumbnail, @RequestParam("description") String description) {
@@ -156,6 +170,8 @@ public class MediaController {
             return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
         }
     }
+
+
 
     @GetMapping("/all")
     public List<MediaModel> getAllMedia() {
