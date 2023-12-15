@@ -2,14 +2,17 @@ package dk.kea.mulpenbackend.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.kea.mulpenbackend.JwtTokenManager;
 import dk.kea.mulpenbackend.config.ConfigProvider;
 import dk.kea.mulpenbackend.dto.JwtRequestModel;
 import dk.kea.mulpenbackend.dto.JwtResponseModel;
+import dk.kea.mulpenbackend.JwtTokenManager;
 import dk.kea.mulpenbackend.model.UserModel;
+import dk.kea.mulpenbackend.service.IUserService;
 import dk.kea.mulpenbackend.service.JwtUserDetailsService;
 import dk.kea.mulpenbackend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,11 +33,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 
-
 @RestController
-public class UserController {
-    private final ConfigProvider configProvider;
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserController
+{
     @Autowired
     private JwtUserDetailsService userDetailsService;
     @Autowired
@@ -44,12 +47,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private ConfigProvider configProvider;
+
     @Autowired
     public UserController(ConfigProvider configProvider) {
         this.configProvider = configProvider;
     }
-
-
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponseModel> createToken(@RequestBody JwtRequestModel request) throws Exception {
@@ -95,8 +98,8 @@ public class UserController {
     @PostMapping("/getSecret")
     public ResponseEntity<Map> getSecret() {
         System.out.println("getSecret is called");
-        Map<String, String> map = new HashMap<>();
-        map.put("message", "this is secret from server");
+        Map<String,String > map = new HashMap<>();
+        map.put("message","this is secret from server");
         return ResponseEntity.ok(map);
     }
 

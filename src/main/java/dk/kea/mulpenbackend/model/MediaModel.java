@@ -20,4 +20,5 @@ public class MediaModel {
     private String type;
     private String filePath;
     private String description;
+    private String thumbnailFilePath;
 }
