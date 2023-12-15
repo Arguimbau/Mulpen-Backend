@@ -6,7 +6,9 @@ import dk.kea.mulpenbackend.JwtFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,6 +29,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
+@ComponentScan
 @AllArgsConstructor
 public class SecurityConfiguration implements WebMvcConfigurer {
     private JwtAuthenticationEntryPoint authenticationEntryPoint;
@@ -43,16 +47,33 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/dashboard", "/opretBruger", "/sletbruger" , "/upload").authenticated()
-                        .anyRequest().permitAll()
+                        /*
+                        .requestMatchers(HttpMethod.POST, "/media/upload", "/addUser", "/slideshow/uploadSlideshow", "/deleteUser", "/addUser").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/media/delete/**", "/slideshow/deleteSlideshow/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
+
+                         */
+                        .requestMatchers("/", "/dashboard", "/login", "/upload", "/media/upload/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/**", "/media/all", "media/upload/**", "media/upload/*").permitAll()
+                        .requestMatchers("/images/**", "/font/**", "/objects/**", "/slideshowImages/**", "/html/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/media/upload").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/media/delete/*").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .headers(headers -> headers
+                        .httpStrictTransportSecurity().disable()
+                        .frameOptions().disable()
+                        .contentTypeOptions().disable()
+                        .cacheControl().disable()
+                        .addHeaderWriter(new StaticHeadersWriter("Accept-Ranges", "none")));
 
         return http.build();
     }
@@ -77,8 +98,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     }
 
  */
-
-
 
 
     @Override
@@ -156,4 +175,3 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 }
 
      */
-

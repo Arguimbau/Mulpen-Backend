@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class InitData implements CommandLineRunner
 {
@@ -36,6 +38,7 @@ public class InitData implements CommandLineRunner
         UserModel user = new UserModel();
         user.setPassword("1234");
         user.setUsername("admin");
+        user.setRoles(Set.of("ADMIN", "USER"));
         userService.save(user);
 
 

@@ -36,15 +36,20 @@ public class JwtFilter extends OncePerRequestFilter {
             System.out.println("Token extracted: " + token);
             try {
                 String username = jwtTokenManager.getUsernameFromToken(token);
+                System.out.println("Extracted username from token: " + username);
                 validateToken(request, username, token);
+                System.out.println("The current user has token: " + token);
             } catch (Exception e) {
-                System.out.println("Unable to get JWT Token: " + e.getMessage());
+                System.out.println("Unable to get/validate JWT Token: " + e.getMessage());
             }
+            //filterChain.doFilter(request, response); //Added this line
         } else {
             // For anonymous users, proceed without checking the token
             System.out.println("No or invalid Authorization header for this request. Proceeding for anonymous user.");
-            filterChain.doFilter(request, response);
+            System.out.println("Header names: " + request.getHeaderNames());
+            System.out.println("Header names: " + request.getHeaderNames());
         }
+            filterChain.doFilter(request, response);
     }
 
     private void validateToken(HttpServletRequest request, String username, String token) {

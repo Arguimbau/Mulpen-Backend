@@ -13,6 +13,6 @@ public class CorsConfig implements WebMvcConfigurer {
             .allowedOrigins("https://www.mulpen.dk")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
             .allowedHeaders("*")
-            .allowCredentials(true);
+            .allowCredentials(false);
   }
 }

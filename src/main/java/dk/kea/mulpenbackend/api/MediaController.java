@@ -5,6 +5,8 @@ import dk.kea.mulpenbackend.model.MediaModel;
 import dk.kea.mulpenbackend.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequestMapping("/media")
-@CrossOrigin
 @RestController
 public class MediaController {
     private final ConfigProvider configProvider;
@@ -45,72 +46,132 @@ public class MediaController {
 
      */
 
+
+
     @GetMapping("/upload/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         String safeFileName = FilenameUtils.getName(filename);
-        Path filePath = Paths.get(configProvider.uploadDirectory, safeFileName);
+
+        Path uploadPath = Paths.get(configProvider.uploadDirectory, safeFileName);
+        Path thumbnailPath = Paths.get(configProvider.thumbnailDirectory, safeFileName);
+
+        Path filePath = Files.exists(uploadPath) ? uploadPath : thumbnailPath;
+
+        if (!Files.exists(filePath)) {
+            // Handle the case where the file is not found in both directories
+            return ResponseEntity.notFound().build();
+        }
+
         Resource resource = new org.springframework.core.io.PathResource(filePath);
 
         try {
-            // Set content-type dynamically based on the file type
-            String contentType = Files.probeContentType(filePath);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(Files.probeContentType(filePath)));
 
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    //.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
+            return ResponseEntity.ok().headers(headers).body(resource);
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     private String[] badExtensions = {"java", "htm", "html"};
-    private String[] allowedExtensions = {
+    private String[] allowedFileExtensions = {
             "jpg", "png", "jpeg", "gif",
             "mp4", "mov", "mkv", "avi", "mp3", "wav", "flac", "webm", "webp"
     };
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestParam("description") String description) {
+    private String [] allowedThumbnailExtensions = {
+            "jpg", "png", "jpeg"
+    };
 
+
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> handleFileUpload(@RequestPart("file") MultipartFile file, @RequestPart("thumbnail") MultipartFile thumbnail, @RequestParam("description") String description) {
+
+        System.out.println("Upload controller executed");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccessControlAllowOrigin("*");
+
+        //Handle file
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a file to upload");
         }
 
+        //Handle thumbnail
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Please select a thumbnail to upload");
+        }
+
 
         try {
+            //Setup file
+            MediaModel fileMediaModel = new MediaModel();
+            String fileSafeFileName = FilenameUtils.getName(file.getOriginalFilename());
+            String fileExtension = FilenameUtils.getExtension(fileSafeFileName);
 
-            MediaModel mediaModel = new MediaModel();
-            String safeFileName = FilenameUtils.getName(file.getOriginalFilename());
-            String extension = FilenameUtils.getExtension(safeFileName);
-            if (extension == null) {
+            //Setup thumbnail
+            MediaModel thumbnailMediaModel = new MediaModel();
+            String thumbnailSafeFileName = FilenameUtils.getName(thumbnail.getOriginalFilename());
+            String thumbnailExtension = FilenameUtils.getExtension(thumbnailSafeFileName);
+
+            //If file extensions are null
+            if (fileExtension == null) {
                 return ResponseEntity.badRequest().body("File type not allowed");
             }
 
-            extension = extension.toLowerCase();
-            if (Arrays.asList(badExtensions).contains(extension)) {
-                return ResponseEntity.badRequest().body("File type not allowed");
-            }
-            if (!Arrays.asList(allowedExtensions).contains(extension)) {
+            if (thumbnailExtension == null) {
                 return ResponseEntity.badRequest().body("File type not allowed");
             }
 
-            Path uploadPath = Paths.get(configProvider.uploadDirectory, safeFileName);
+            //File extensions to lowercase for consistency
+            fileExtension = fileExtension.toLowerCase();
+            thumbnailExtension = thumbnailExtension.toLowerCase();
 
-            mediaModel.setFilePath(safeFileName);
-            mediaModel.setDescription(description);
 
-            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+            //Check file extension
+            if (Arrays.asList(badExtensions).contains(fileExtension) || Arrays.asList(badExtensions).contains(thumbnailExtension)) {
+                return ResponseEntity.badRequest().body("File type not allowed");
+            }
 
-            mediaService.saveMedia(mediaModel);
 
-            return ResponseEntity.ok("File upload successful: " + safeFileName);
+            if (!Arrays.asList(allowedFileExtensions).contains(fileExtension)) {
+                return ResponseEntity.badRequest().body("File type not allowed");
+            }
+
+            if (!Arrays.asList(allowedThumbnailExtensions).contains(thumbnailExtension)){
+                return ResponseEntity.badRequest().body("Thumbnail file type not allowed");
+            }
+
+            Path fileUploadPath = Paths.get(configProvider.uploadDirectory, fileSafeFileName);
+            Path thumbnailUploadPath = Paths.get(configProvider.thumbnailDirectory, thumbnailSafeFileName);
+
+
+            //Set attributes
+            fileMediaModel.setFilePath(fileSafeFileName);
+            fileMediaModel.setDescription(description);
+            fileMediaModel.setThumbnailFilePath(thumbnailSafeFileName);
+
+            thumbnailMediaModel.setFilePath(thumbnailSafeFileName);
+            thumbnailMediaModel.setDescription(description);
+
+            Files.copy(file.getInputStream(), fileUploadPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(thumbnail.getInputStream(), thumbnailUploadPath, StandardCopyOption.REPLACE_EXISTING);
+
+            //Safe media
+            mediaService.saveMedia(fileMediaModel);
+            mediaService.saveMedia(thumbnailMediaModel);
+
+            return new ResponseEntity<>("File upload successful: " + fileSafeFileName + ", " + thumbnailSafeFileName, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error occurred during file upload: " + file.getOriginalFilename());
         }
     }
+
+
 
     @GetMapping("/all")
     public List<MediaModel> getAllMedia() {
