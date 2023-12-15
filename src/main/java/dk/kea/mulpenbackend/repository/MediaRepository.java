@@ -1,4 +1,4 @@
-package dk.kea.mulpenbackend.Repository;
+package dk.kea.mulpenbackend.repository;
 
 import dk.kea.mulpenbackend.model.MediaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
