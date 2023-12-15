@@ -59,6 +59,13 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .requestMatchers("/", "/dashboard", "/login", "/upload", "/media/upload/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/**", "/media/all", "media/upload/**", "media/upload/*").permitAll()
                         .requestMatchers("/images/**", "/font/**", "/objects/**", "/slideshowImages/**", "/html/**", "/css/**", "/js/**").permitAll()
+
+                        //ALL HTML PAGES
+                        .requestMatchers("/about.html", "/contact.html", "/createUser.html", "/dashboard.html",
+                                "/delete-media.html", "/deleteSlideshow.html", "/deleteUser.html", "/index.html", "/login.html",
+                                "/updateAboutUs.html", "/uploadMedia.html", "/uploadSlideshow.html", "/viewMedia.html", "/viewVideo.html").permitAll()
+
+
                         .requestMatchers(HttpMethod.POST,"/media/upload").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/media/delete/*").permitAll()
                         .anyRequest().authenticated()

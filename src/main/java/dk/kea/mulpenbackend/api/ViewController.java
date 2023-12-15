@@ -21,7 +21,7 @@ public class ViewController {
     @GetMapping("/videos")
     public void forwardToViewVideoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/viewVideo.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/viewVideo.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -29,7 +29,7 @@ public class ViewController {
     @GetMapping("/viewMedia")
     public void forwardToViewMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       ServletContext context = request.getServletContext();
-      RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/viewMedia.html");
+      RequestDispatcher requestDispatcher = context.getRequestDispatcher("/viewMedia.html");
       requestDispatcher.forward(request, response);
     }
 
@@ -37,7 +37,7 @@ public class ViewController {
     @GetMapping("/upload")
     public void forwardToUploadMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/uploadMedia.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadMedia.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -45,7 +45,7 @@ public class ViewController {
     @GetMapping("/deleteMedia")
     public void forwardToDeleteMediaPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/delete-media.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/delete-media.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -55,7 +55,7 @@ public class ViewController {
     @GetMapping("/dashboard")
     public void forwardToDashboardPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/dashboard.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/dashboard.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -63,7 +63,7 @@ public class ViewController {
     @GetMapping("/deleteUser")
     public void forwardToDeleteUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/deleteUser.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/deleteUser.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -71,7 +71,7 @@ public class ViewController {
     @GetMapping("/deleteSlideshow")
     public void forwardToDeleteSlideshowPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/deleteSlideshow.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/deleteSlideshow.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -79,7 +79,7 @@ public class ViewController {
     @GetMapping("/createUser")
     public void forwardToCreateUserPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/createUser.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/createUser.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -87,7 +87,7 @@ public class ViewController {
     @GetMapping("/updateAboutUs")
     public void forwardToUpdateAboutUsPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/updateAboutUs.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/updateAboutUs.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -95,7 +95,7 @@ public class ViewController {
     @GetMapping("/uploadSlideshow")
     public void forwardUploadSlideShow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/uploadSlideshow.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/uploadSlideshow.html");
         requestDispatcher.forward(request, response);
     }
     //about
@@ -106,7 +106,7 @@ public class ViewController {
     @GetMapping("/login")
     public void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/login.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/login.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -115,7 +115,7 @@ public class ViewController {
     @GetMapping("/")
     public void forwardToHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/index.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/index.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -123,7 +123,7 @@ public class ViewController {
     @GetMapping("/about")
     public void forwardToAboutPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/about.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/about.html");
         requestDispatcher.forward(request, response);
     }
 
@@ -131,7 +131,7 @@ public class ViewController {
     @GetMapping("/contact")
     public void forwardToContactPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ServletContext context = request.getServletContext();
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/html/contact.html");
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher("/contact.html");
         requestDispatcher.forward(request, response);
     }
 }
